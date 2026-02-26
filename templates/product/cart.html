@@ -1,0 +1,184 @@
+{% extends "base/base.html" %} {% block start %}
+
+<section class="section-content padding-y bg">
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        {% if cart_items %}
+        <table class="table table-borderless table-shopping-cart">
+          <thead class="text-muted">
+            <tr class="small text-uppercase">
+              <th scope="col">Product</th>
+              <th scope="col" width="120">Quantity</th>
+              <th scope="col" width="160">Price</th>
+              <th scope="col" class="text-right" width="120"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+            <tr>
+              <td>
+                <figure class="itemside align-items-center">
+                  <div class="aside">
+                    <img
+                      src="/media/{{ item.product.product_images.first.product_image }}"
+                      class="img-sm"
+                    />
+                  </div>
+                  <figcaption class="info">
+                    <a
+                      href="{% url 'get_product' item.product.slug %}"
+                      class="title text-dark"
+                      >{{ item.product.product_name }}</a
+                    >
+                    {% if item.size %}
+                    <p class="text-muted small">Size: {{ item.size }}</p>
+                    {% endif %}
+                  </figcaption>
+                </figure>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control cart-qty"
+                  value="{{ item.quantity }}"
+                  data-product-id="{{ item.product.pk }}"
+                  data-size="{{ item.size }}"
+                />
+              </td>
+              <td>
+                <div class="price-wrap">
+                  <var
+                    class="price cart-line-total"
+                    data-product-id="{{ item.product.pk }}"
+                    data-size="{{ item.size }}"
+                    >${{ item.line_total }}.00</var
+                  >
+                  <small class="text-muted"
+                    >${{ item.product.price }}.00 each</small
+                  >
+                </div>
+              </td>
+              <td class="text-right">
+                <a
+                  href="#"
+                  class="btn btn-light cart-remove"
+                  data-product-id="{{ item.product.pk }}"
+                  data-size="{{ item.size }}"
+                  >Remove</a
+                >
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end">
+          <div class="text-right">
+            <div class="h5">Subtotal: $<span id="cart-subtotal">{{ subtotal }}</span>.00</div>
+            <div class="h4">Total: $<span id="cart-total">{{ total }}</span>.00</div>
+            <a href="#" class="btn btn-primary">Checkout</a>
+          </div>
+        </div>
+        {% else %}
+        <p>Your cart is empty.</p>
+        <a href="/" class="btn btn-primary">Continue shopping</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function updateBadge(count) {
+    var badge = document.querySelector(".notify");
+    if (badge) badge.textContent = count;
+  }
+
+  function updateTotals(subtotal, total) {
+    var subtotalEl = document.getElementById("cart-subtotal");
+    var totalEl = document.getElementById("cart-total");
+    if (subtotalEl) subtotalEl.textContent = subtotal;
+    if (totalEl) totalEl.textContent = total;
+  }
+
+  function updateLineTotal(productId, size, lineTotal) {
+    var selector =
+      '.cart-line-total[data-product-id="' +
+      productId +
+      '"][data-size="' +
+      size +
+      '"]';
+    var el = document.querySelector(selector);
+    if (el) el.textContent = "$" + lineTotal + ".00";
+  }
+
+  function postUpdate(productId, size, quantity, row) {
+    fetch("{% url 'update_cart' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body:
+        "product_id=" +
+        encodeURIComponent(productId) +
+        "&size=" +
+        encodeURIComponent(size) +
+        "&quantity=" +
+        encodeURIComponent(quantity),
+    })
+      .then(function (res) {
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data.success) return;
+        updateBadge(data.cart_count);
+        updateTotals(data.subtotal, data.total);
+        if (data.removed && row) {
+          row.remove();
+        } else {
+          updateLineTotal(productId, size, data.line_total);
+        }
+      });
+  }
+
+  document.querySelectorAll(".cart-qty").forEach(function (input) {
+    input.addEventListener("change", function (e) {
+      var productId = e.target.getAttribute("data-product-id");
+      var size = e.target.getAttribute("data-size") || "";
+      var qty = parseInt(e.target.value, 10);
+      if (isNaN(qty) || qty < 0) qty = 0;
+      var row = e.target.closest("tr");
+      postUpdate(productId, size, qty, row);
+    });
+  });
+
+  document.querySelectorAll(".cart-remove").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      var productId = e.target.getAttribute("data-product-id");
+      var size = e.target.getAttribute("data-size") || "";
+      var row = e.target.closest("tr");
+      postUpdate(productId, size, 0, row);
+    });
+  });
+</script>
+
+{% endblock %}

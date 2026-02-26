@@ -1,4 +1,32 @@
 {% extends "base/base.html"%} {% block start %}
+<style>
+  .quantity-spinner.input-spinner {
+    width: 132px !important;
+  }
+  .quantity-spinner.input-spinner .btn {
+    width: 34px;
+  }
+  #quantity-input {
+    max-width: none !important;
+    flex: 1 1 auto !important;
+    min-width: 58px;
+    min-height: 36px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #111 !important;
+    background-color: #fff !important;
+    text-align: center;
+    padding: 0 6px;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  #quantity-input::-webkit-outer-spin-button,
+  #quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>
 
 <section class="section-content padding-y bg">
   <div class="container">
@@ -31,6 +59,11 @@
         <main class="col-md-6 border-left">
           <article class="content-body">
             <h2 class="title">{{product.product_name}}</h2>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger mt-2">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
 
             <div class="rating-wrap my-3">
               <ul class="rating-stars">
@@ -58,7 +91,7 @@
             </div>
             <!-- price-detail-wrap .// -->
 
-            <p>{{product.product_desription}}</p>
+            <p>{{product.product_description}}</p>
 
             <dl class="row">
               <dt class="col-sm-3">Model#</dt>
@@ -72,10 +105,13 @@
             </dl>
 
             <hr />
-            <div class="form-row">
+            <form method="POST" action="{% url 'add_to_cart' product.slug %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}" />
+              <div class="form-row">
               <div class="form-group col-md flex-grow-0">
                 <label>Quantity</label>
-                <div class="input-group mb-3 input-spinner">
+                <div class="input-group mb-3 input-spinner quantity-spinner">
                   <div class="input-group-prepend">
                     <button
                       class="btn btn-light"
@@ -85,7 +121,14 @@
                       +
                     </button>
                   </div>
-                  <input type="text" class="form-control" value="1" />
+                  <input
+                    type="number"
+                    name="quantity"
+                    class="form-control"
+                    value="1"
+                    min="1"
+                    id="quantity-input"
+                  />
                   <div class="input-group-append">
                     <button
                       class="btn btn-light"
@@ -117,6 +160,7 @@
                       %}checked{%
                       endif
                       %}
+                      required
                     />
                     <div class="custom-control-label">{{ size.size_name }}</div>
                   </label>
@@ -125,14 +169,15 @@
               </div>
               {% endif %}
               <!-- col.// -->
-            </div>
+              </div>
             <!-- row.// -->
 
             <a href="#" class="btn btn-primary"> Buy now </a>
-            <a href="#" class="btn btn-outline-primary">
+            <button type="submit" class="btn btn-outline-primary">
               <span class="text">Add to cart</span>
               <i class="fas fa-shopping-cart"></i>
-            </a>
+            </button>
+            </form>
           </article>
           <!-- product-info-aside .// -->
         </main>
@@ -144,5 +189,30 @@
     <!-- ============================ COMPONENT 1 END .// ================================= -->
   </div>
 </section>
+
+<script>
+  (function () {
+    var input = document.getElementById("quantity-input");
+    var plus = document.getElementById("button-plus");
+    var minus = document.getElementById("button-minus");
+
+    if (!input || !plus || !minus) return;
+
+    plus.addEventListener("click", function () {
+      var current = parseInt(input.value, 10);
+      if (isNaN(current) || current < 1) current = 1;
+      input.value = current + 1;
+    });
+
+    minus.addEventListener("click", function () {
+      var current = parseInt(input.value, 10);
+      if (isNaN(current) || current <= 1) {
+        input.value = 1;
+        return;
+      }
+      input.value = current - 1;
+    });
+  })();
+</script>
 
 {% endblock %}
