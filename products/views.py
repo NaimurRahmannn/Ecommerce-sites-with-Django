@@ -166,3 +166,80 @@ def update_cart(request):
             "cart_count": cart_count,
         }
     )
+
+
+def buy_now(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+
+    if request.method == "POST":
+        qty_raw = request.POST.get("quantity", "1")
+        size = request.POST.get("select_size") or ""
+    else:
+        qty_raw = request.GET.get("quantity", "1")
+        size = request.GET.get("size", "")
+
+    try:
+        quantity = int(qty_raw)
+    except ValueError:
+        quantity = 1
+
+    if quantity < 1:
+        quantity = 1
+
+    if product.size_variant.exists() and not size:
+        messages.error(request, "Please select a size before Buy now.")
+        return redirect("get_product", slug=product.slug)
+
+    line_total = product.price * quantity
+    subtotal = line_total
+    context = {
+        "checkout_items": [
+            {
+                "product": product,
+                "quantity": quantity,
+                "size": size,
+                "line_total": line_total,
+            }
+        ],
+        "subtotal": subtotal,
+        "shipping": 0,
+        "total": subtotal,
+        "back_url": "get_product",
+        "back_url_kwargs": {"slug": product.slug},
+    }
+    return render(request, "product/checkout.html", context)
+
+
+def checkout(request):
+    cart = _get_cart(request)
+    checkout_items = []
+    subtotal = 0
+
+    for item in cart:
+        product = Product.objects.filter(pk=item.get("product_id")).first()
+        if not product:
+            continue
+        quantity = item.get("quantity", 1)
+        line_total = product.price * quantity
+        subtotal += line_total
+        checkout_items.append(
+            {
+                "product": product,
+                "quantity": quantity,
+                "size": item.get("size", ""),
+                "line_total": line_total,
+            }
+        )
+
+    if not checkout_items:
+        messages.error(request, "Your cart is empty.")
+        return redirect("cart")
+
+    context = {
+        "checkout_items": checkout_items,
+        "subtotal": subtotal,
+        "shipping": 0,
+        "total": subtotal,
+        "back_url": "cart",
+    }
+    return render(request, "product/checkout.html", context)

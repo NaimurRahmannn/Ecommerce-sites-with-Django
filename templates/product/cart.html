@@ -78,7 +78,7 @@
           <div class="text-right">
             <div class="h5">Subtotal: $<span id="cart-subtotal">{{ subtotal }}</span>.00</div>
             <div class="h4">Total: $<span id="cart-total">{{ total }}</span>.00</div>
-            <a href="#" class="btn btn-primary">Checkout</a>
+            <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
           </div>
         </div>
         {% else %}

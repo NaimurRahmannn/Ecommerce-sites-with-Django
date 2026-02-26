@@ -172,7 +172,13 @@
               </div>
             <!-- row.// -->
 
-            <a href="#" class="btn btn-primary"> Buy now </a>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              formaction="{% url 'buy_now' product.slug %}"
+            >
+              Buy now
+            </button>
             <button type="submit" class="btn btn-outline-primary">
               <span class="text">Add to cart</span>
               <i class="fas fa-shopping-cart"></i>
