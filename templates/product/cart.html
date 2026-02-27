@@ -53,10 +53,10 @@
                     class="price cart-line-total"
                     data-product-id="{{ item.product.pk }}"
                     data-size="{{ item.size }}"
-                    >${{ item.line_total }}.00</var
+                    >${{ item.line_total|floatformat:2 }}</var
                   >
                   <small class="text-muted"
-                    >${{ item.product.price }}.00 each</small
+                    >${{ item.product.price|floatformat:2 }} each</small
                   >
                 </div>
               </td>
@@ -76,8 +76,8 @@
 
         <div class="d-flex justify-content-end">
           <div class="text-right">
-            <div class="h5">Subtotal: $<span id="cart-subtotal">{{ subtotal }}</span>.00</div>
-            <div class="h4">Total: $<span id="cart-total">{{ total }}</span>.00</div>
+            <div class="h5">Subtotal: $<span id="cart-subtotal">{{ subtotal|floatformat:2 }}</span></div>
+            <div class="h4">Total: $<span id="cart-total">{{ total|floatformat:2 }}</span></div>
             <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
           </div>
         </div>
@@ -114,8 +114,8 @@
   function updateTotals(subtotal, total) {
     var subtotalEl = document.getElementById("cart-subtotal");
     var totalEl = document.getElementById("cart-total");
-    if (subtotalEl) subtotalEl.textContent = subtotal;
-    if (totalEl) totalEl.textContent = total;
+    if (subtotalEl) subtotalEl.textContent = Number(subtotal).toFixed(2);
+    if (totalEl) totalEl.textContent = Number(total).toFixed(2);
   }
 
   function updateLineTotal(productId, size, lineTotal) {
@@ -126,7 +126,7 @@
       size +
       '"]';
     var el = document.querySelector(selector);
-    if (el) el.textContent = "$" + lineTotal + ".00";
+    if (el) el.textContent = "$" + Number(lineTotal).toFixed(2);
   }
 
   function postUpdate(productId, size, quantity, row) {

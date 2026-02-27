@@ -16,14 +16,14 @@ class Category(Basemodel):
     
 class ColorVariant(Basemodel):
     color_name = models.CharField(max_length=100)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self) -> str:
         return self.color_name
 
 class SizeVariant(Basemodel):
     size_name = models.CharField(max_length=100)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     def __str__(self) -> str:
         return self.size_name
@@ -33,7 +33,7 @@ class Product(Basemodel):
     product_name=models.CharField(max_length=100)
     slug=models.SlugField(unique=True, null=True, blank=True)
     category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name="products")
-    price=models.IntegerField()
+    price=models.DecimalField(max_digits=10, decimal_places=2)
     product_description=models.TextField()
     color_variant = models.ManyToManyField(ColorVariant , blank=True)
     size_variant = models.ManyToManyField(SizeVariant , blank=True)

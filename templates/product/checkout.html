@@ -98,23 +98,23 @@
                 <small class="text-muted d-block">Size: {{ item.size }}</small>
                 {% endif %}
                 <small class="text-muted d-block">Qty: {{ item.quantity }}</small>
-                <small class="text-muted d-block">${{ item.product.price }}.00 each</small>
+                <small class="text-muted d-block">${{ item.product.price|floatformat:2 }} each</small>
               </figcaption>
             </figure>
             {% endfor %}
 
             <dl class="dlist-align">
               <dt>Subtotal:</dt>
-              <dd class="text-right">${{ subtotal }}.00</dd>
+              <dd class="text-right">${{ subtotal|floatformat:2 }}</dd>
             </dl>
             <dl class="dlist-align">
               <dt>Shipping:</dt>
-              <dd class="text-right">${{ shipping }}.00</dd>
+              <dd class="text-right">${{ shipping|floatformat:2 }}</dd>
             </dl>
             <hr />
             <dl class="dlist-align">
               <dt><strong>Total:</strong></dt>
-              <dd class="text-right"><strong>${{ total }}.00</strong></dd>
+              <dd class="text-right"><strong>${{ total|floatformat:2 }}</strong></dd>
             </dl>
 
             <button class="btn btn-primary btn-block">Place Order</button>
