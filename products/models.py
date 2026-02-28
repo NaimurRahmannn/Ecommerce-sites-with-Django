@@ -2,17 +2,28 @@ from django.db import models
 from django.utils.text import slugify
 from base.models import Basemodel
 
+CATEGORY_TYPE_CHOICES = (
+    ('MEN', 'Men'),
+    ('WOMEN', 'Women'),
+)
+
 class Category(Basemodel):
     categroy_name=models.CharField(max_length=100)
     slug=models.SlugField(unique=True, null=True, blank=True)
-    category_image=models.ImageField(upload_to="categories")
+    category_type=models.CharField(max_length=10, choices=CATEGORY_TYPE_CHOICES, default='MEN')
     
-    def save(self , *args , **kwargs):
-        self.slug = slugify(self.categroy_name)
-        super(Category ,self).save(*args , **kwargs)
+    def save(self, *args, **kwargs):
+        base_slug = slugify(self.categroy_name)
+        slug = base_slug
+        n = 1
+        while Category.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            slug = f"{base_slug}-{n}"
+            n += 1
+        self.slug = slug
+        super(Category, self).save(*args, **kwargs)
         
     def __str__(self) -> str:
-        return self.categroy_name
+        return f"{self.categroy_name} ({self.get_category_type_display()})"
     
 class ColorVariant(Basemodel):
     color_name = models.CharField(max_length=100)

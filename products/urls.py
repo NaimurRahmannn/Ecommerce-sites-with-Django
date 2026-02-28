@@ -7,6 +7,7 @@ from products.views import (
     update_cart,
     buy_now,
     checkout,
+    category_products,
 )
 
 urlpatterns = [
@@ -16,5 +17,6 @@ urlpatterns = [
     path('buy-now/<slug>/', buy_now, name="buy_now"),
     path('add-to-cart/<slug>/', add_to_cart, name="add_to_cart"),
     path('remove-from-cart/<slug>/', remove_from_cart, name="remove_from_cart"),
+    path('category/<slug:slug>/', category_products, name="category_products"),
     path('<slug>/', get_product, name="get_product"),
 ]

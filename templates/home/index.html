@@ -5,26 +5,35 @@
 
 <div class="container mt-5 pt-5">
     <div class="row">
-        
-        {% for product in products %}
-        <div class="col-md-3">
-            <figure class="card card-product-grid">
-                <div class="img-wrap"> <img src="/media/{{product.product_images.first.product_image}}"> </div>
-                <figcaption class="info-wrap border-top">
-                    <a href="{% url 'get_product' product.slug %}" class="title">
-                        <b>{{product.product_name}}</b></a>
-                    <div class="price mt-2">${{ product.price|floatformat:2 }}</div> <!-- price-wrap.// -->
-                </figcaption>
-            </figure> <!-- card // -->
-        </div> <!-- col.// -->
 
-        {% endfor %}
-      
-        
-       
-    </div>
+        {% include "base/sidebar.html" %}
+
+        <div class="col-md-9">
+          {% if current_category %}
+          <h4 class="mb-3">{{ current_category.categroy_name }}</h4>
+          {% endif %}
+          <div class="row">
+            {% for product in products %}
+            <div class="col-md-4">
+                <figure class="card card-product-grid">
+                    <div class="img-wrap"> <img src="/media/{{product.product_images.first.product_image}}"> </div>
+                    <figcaption class="info-wrap border-top">
+                        <a href="{% url 'get_product' product.slug %}" class="title">
+                            <b>{{product.product_name}}</b></a>
+                        <div class="price mt-2">${{ product.price|floatformat:2 }}</div>
+                    </figcaption>
+                </figure>
+            </div>
+            {% empty %}
+            <div class="col-12">
+              <p class="text-muted">No products found in this category.</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
 
     </div>
+</div>
 
 
 {% endblock %}

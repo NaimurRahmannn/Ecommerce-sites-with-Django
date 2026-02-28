@@ -26,10 +26,19 @@
     -webkit-appearance: none;
     margin: 0;
   }
+  .thumbs-wrap .item-thumb.active {
+    border: 2px solid #3167eb;
+    border-radius: 4px;
+  }
 </style>
 
 <section class="section-content padding-y bg">
   <div class="container">
+    <div class="row">
+
+      {% include "base/sidebar.html" %}
+
+      <div class="col-md-9">
     <!-- ============================ COMPONENT 1 ================================= -->
     <div class="card">
       <div class="row no-gutters">
@@ -39,6 +48,7 @@
               <div>
                 <a href="#"
                   ><img
+                    id="main-product-image"
                     src="/media/{{product.product_images.first.product_image}}"
                 /></a>
               </div>
@@ -46,7 +56,11 @@
             <!-- slider-product.// -->
             <div class="thumbs-wrap">
               {% for image in product.product_images.all %}
-              <a href="#" class="item-thumb">
+              <a
+                href="#"
+                class="item-thumb {% if forloop.first %}active{% endif %}"
+                data-image="/media/{{image.product_image}}"
+              >
                 <img src="/media/{{image.product_image}}"
               /></a>
 
@@ -193,11 +207,33 @@
     </div>
     <!-- card.// -->
     <!-- ============================ COMPONENT 1 END .// ================================= -->
+      </div>
+      <!-- col-md-9.// -->
+    </div>
+    <!-- row.// -->
   </div>
 </section>
 
 <script>
   (function () {
+    var mainImage = document.getElementById("main-product-image");
+    var thumbs = document.querySelectorAll(".thumbs-wrap .item-thumb");
+
+    thumbs.forEach(function (thumb) {
+      thumb.addEventListener("click", function (event) {
+        event.preventDefault();
+        var selectedImage = thumb.getAttribute("data-image");
+        if (mainImage && selectedImage) {
+          mainImage.src = selectedImage;
+        }
+
+        thumbs.forEach(function (item) {
+          item.classList.remove("active");
+        });
+        thumb.classList.add("active");
+      });
+    });
+
     var input = document.getElementById("quantity-input");
     var plus = document.getElementById("button-plus");
     var minus = document.getElementById("button-minus");

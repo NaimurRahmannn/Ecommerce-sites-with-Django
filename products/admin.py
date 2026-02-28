@@ -3,7 +3,11 @@ from django.contrib import admin
 # Register your models here.
 from .models import *
 
-admin.site.register(Category)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['categroy_name', 'category_type', 'slug']
+    list_filter = ['category_type']
+    prepopulated_fields = {'slug': ('categroy_name',)}
 
 class ProductImageAdmin(admin.StackedInline):
     model =ProductImage

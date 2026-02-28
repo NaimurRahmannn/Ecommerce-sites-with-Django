@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
-from products.models import Product
+from products.models import Product, Category
 
 
 def _get_cart(request):
@@ -243,3 +243,13 @@ def checkout(request):
         "back_url": "cart",
     }
     return render(request, "product/checkout.html", context)
+
+
+def category_products(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    products = Product.objects.filter(category=category)
+    context = {
+        "products": products,
+        "current_category": category,
+    }
+    return render(request, "home/index.html", context)
