@@ -43,10 +43,10 @@ a:hover {
   font-size: 16px; }
 
 .icon-sm {
-  width: 48px;
-  height: 48px;
-  line-height: 48px;
-  font-size: 20px; }
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px; }
 
 .icon-md {
   width: 60px;
@@ -371,13 +371,18 @@ p:last-child {
 
 .header-main {
   position: relative;
-  padding-top: 1rem;
-  padding-bottom: 1rem; }
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem; }
 
-.brand-wrap .logo, .navbar-brand .logo {
+.brand-wrap, .navbar-brand{
   margin-right: 7px;
-  max-height: 42px;
+  max-height: 60px;
+  width: auto;
   display: inline-block; }
+
+@media (max-width: 576px) {
+  .brand-wrap .logo, .navbar-brand .logo {
+    max-height: 40px; } }
 
 .navbar-main .nav-link {
   font-weight: 600; }
@@ -402,6 +407,89 @@ p:last-child {
     right: -10px; }
   .widget-header:hover i {
     color: #3167eb; }
+
+/* align logo: left on desktop, centered on mobile */
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 0;
+  /* small left nudge to align under top nav */
+  margin-left: -36px;
+}
+
+@media (max-width: 576px) {
+  .brand-wrap {
+    justify-content: center;
+    margin-left: 0;
+  }
+}
+
+/* nudge search box slightly to the right on desktop, keep normal on mobile */
+.header-main .search {
+  margin-left: 20px;
+}
+
+@media (max-width: 768px) {
+  .header-main .search {
+    margin-left: 0;
+  }
+}
+
+/* Search button custom color */
+.header-main .search .btn,
+.header-main .search .input-group-append .btn {
+  background-color: #B88646;
+  border-color: #B88646;
+  color: #ffffff;
+}
+.header-main .search .btn:hover,
+.header-main .search .input-group-append .btn:hover,
+.header-main .search .btn:focus,
+.header-main .search .input-group-append .btn:focus {
+  background-color: #a2703f;
+  border-color: #a2703f;
+  color: #ffffff;
+}
+/* Branded focus/active shadow */
+.header-main .search .btn:focus,
+.header-main .search .input-group-append .btn:focus,
+.header-main .search .btn:active,
+.header-main .search .input-group-append .btn:active,
+.header-main .search .btn:focus:not(:disabled):not(.disabled) {
+  outline: none !important;
+  box-shadow: 0 0 0 0.25rem rgba(184,134,70,0.25) !important;
+}
+.header-main .search .btn:focus-visible,
+.header-main .search .input-group-append .btn:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(184,134,70,0.25) !important;
+}
+
+/* Search input focus: use brand color (#B88646) instead of default blue */
+.header-main .search .form-control:focus,
+.header-main .search .form-control:focus-visible,
+.header-main .search .input-group:focus-within {
+  border-color: #B88646 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 0.2rem rgba(184,134,70,0.25) !important;
+}
+
+/* Prevent input-group focus from changing the search button's color/shadow */
+.header-main .search .input-group:focus-within .input-group-append .btn,
+.header-main .search .input-group:focus-within .btn {
+  background-color: #B88646 !important;
+  border-color: #B88646 !important;
+  color: #ffffff !important;
+  /* keep the button's branded shadow instead of the gold one */
+  box-shadow: 0 0 0 0.25rem rgba(184,134,70,0.25) !important;
+  outline: none !important;
+}
+
+/* Also ensure focus-visible on button uses branded shadow */
+.header-main .search .input-group-append .btn:focus-visible,
+.header-main .search .input-group-append .btn:focus {
+  box-shadow: 0 0 0 0.25rem rgba(184,134,70,0.25) !important;
+}
 
 /* desktop only */
 /* desktop only .end */
