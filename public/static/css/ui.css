@@ -408,6 +408,33 @@ p:last-child {
   .widget-header:hover i {
     color: #3167eb; }
 
+/* Only style the header cart icon and its badge */
+.cart-header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; /* keep icon background transparent unless you want filled */
+  border-color: transparent;
+  color: #B88646 !important;
+}
+.cart-header-btn i {
+  color: #B88646 !important;
+}
+.cart-header-count {
+  background-color: #B88646 !important;
+  border-color: #B88646 !important;
+  color: #ffffff !important;
+}
+.cart-header-btn:hover i,
+.cart-header-btn:focus i {
+  color: #a2703f !important;
+}
+.cart-header-count:hover,
+.cart-header-count:focus {
+  background-color: #a2703f !important;
+  border-color: #a2703f !important;
+}
+
 /* align logo: left on desktop, centered on mobile */
 .brand-wrap {
   display: flex;
@@ -621,7 +648,7 @@ p:last-child {
     margin-bottom: 5px;
     color: #212529; }
   .itemside a.title:hover {
-    color: #3167eb; }
+    color: #B88646 !important; }
 
 a.itemside {
   color: initial; }
@@ -774,7 +801,7 @@ a[class*='card'] {
   color: #212529;
   display: block; }
   [class*='card-product'] a.title:hover {
-    color: #3167eb; }
+    color: #B88646 !important; }
 [class*='card-product'] .badge {
   top: 10px;
   left: 10px;

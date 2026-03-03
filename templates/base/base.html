@@ -114,10 +114,10 @@
             <div class="col-lg-4 col-sm-6 col-6">
               <div class="widgets-wrap float-md-right">
                 <div class="widget-header mr-3">
-                  <a href="{% url 'cart' %}" class="icon icon-sm rounded-circle border"
+                  <a href="{% url 'cart' %}" class="icon icon-sm rounded-circle border cart-header-btn"
                     ><i class="fa fa-shopping-cart"></i
                   ></a>
-                  <span class="badge badge-pill badge-danger notify">
+                  <span class="badge badge-pill badge-danger notify cart-header-count">
                     {{ cart_count|default:0 }}
                   </span>
                 </div>
