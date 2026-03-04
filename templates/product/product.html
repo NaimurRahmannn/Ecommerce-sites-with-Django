@@ -1,223 +1,532 @@
 {% extends "base/base.html"%} {% block start %}
 <style>
-  .quantity-spinner.input-spinner {
-    width: 132px !important;
+  /* ===== Classic Product Detail ===== */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap');
+
+  .classic-product-section {
+    background: #f7f5f2;
+    min-height: 60vh;
   }
-  .quantity-spinner.input-spinner .btn {
-    width: 34px;
+
+  /* Card */
+  .classic-product-card {
+    border: 1px solid #e6e0d8;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    overflow: hidden;
+    background: #fff;
   }
-  #quantity-input {
-    max-width: none !important;
-    flex: 1 1 auto !important;
-    min-width: 58px;
-    min-height: 36px;
-    font-size: 16px;
+
+  /* ===== Gallery ===== */
+  .classic-gallery {
+    padding: 24px;
+    background: #fff;
+  }
+  .classic-gallery .main-img-frame {
+    border: 1px solid #ece6de;
+    border-radius: 3px;
+    background: #fdfcfa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+    overflow: hidden;
+  }
+  .classic-gallery .main-img-frame img {
+    max-width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Thumbnails */
+  .classic-thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .classic-thumbs .thumb-item {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    display: inline-block;
+    opacity: 0.7;
+  }
+  .classic-thumbs .thumb-item:hover {
+    border-color: #B88646;
+    opacity: 1;
+  }
+  .classic-thumbs .thumb-item.active {
+    border: 2px solid #B88646;
+    opacity: 1;
+  }
+  .classic-thumbs .thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ===== Product Info ===== */
+  .classic-product-info {
+    padding: 30px 34px 30px 30px;
+    border-left: 1px solid #ece6de;
+  }
+
+  /* Title */
+  .classic-product-info .product-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
     font-weight: 600;
-    line-height: 1.2;
-    color: #111 !important;
-    background-color: #fff !important;
+    color: #2b2218;
+    margin-bottom: 8px;
+    line-height: 1.3;
+    letter-spacing: 0.2px;
+  }
+
+  /* Rating row */
+  .classic-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ece6de;
+  }
+  .classic-rating .stars {
+    color: #c9a24d;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+  .classic-rating .review-count {
+    font-size: 13px;
+    color: #999;
+  }
+  .classic-rating .orders-count {
+    font-size: 12px;
+    color: #7a9a5a;
+    margin-left: auto;
+  }
+
+  /* Price */
+  .classic-price-row {
+    margin-bottom: 18px;
+  }
+  .classic-price-row .price-amount {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #B88646;
+    letter-spacing: -0.3px;
+  }
+  .classic-price-row .price-unit {
+    font-size: 13px;
+    color: #aaa;
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  /* Description */
+  .classic-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.75;
+    margin-bottom: 18px;
+  }
+
+  /* Specs table */
+  .classic-specs {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  .classic-specs tr td {
+    padding: 7px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f2ede6;
+    vertical-align: top;
+  }
+  .classic-specs tr:last-child td {
+    border-bottom: none;
+  }
+  .classic-specs .spec-dt {
+    color: #999;
+    font-weight: 500;
+    width: 96px;
+    padding-right: 12px;
+  }
+  .classic-specs .spec-dd {
+    color: #333;
+    font-weight: 500;
+  }
+
+  /* Divider */
+  .classic-hr {
+    border: none;
+    border-top: 1px solid #ece6de;
+    margin: 16px 0 20px;
+  }
+
+  /* Form label */
+  .classic-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* Quantity */
+  .classic-qty-group {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #d5cec4;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .classic-qty-group .qty-btn {
+    width: 36px;
+    height: 38px;
+    border: none;
+    background: #f7f5f2;
+    font-size: 17px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .classic-qty-group .qty-btn:hover {
+    background: #ece6de;
+    color: #B88646;
+  }
+  .classic-qty-group #quantity-input {
+    width: 46px;
     text-align: center;
-    padding: 0 6px;
+    border: none;
+    border-left: 1px solid #d5cec4;
+    border-right: 1px solid #d5cec4;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    background: #fff;
     -moz-appearance: textfield;
     appearance: textfield;
+    outline: none;
+    max-width: none !important;
+    min-height: 38px;
+    padding: 0;
   }
-  #quantity-input::-webkit-outer-spin-button,
-  #quantity-input::-webkit-inner-spin-button {
+  .classic-qty-group #quantity-input::-webkit-outer-spin-button,
+  .classic-qty-group #quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  .thumbs-wrap .item-thumb.active {
-    border: 2px solid #3167eb;
-    border-radius: 4px;
+
+  /* Size selector */
+  .classic-sizes {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .classic-sizes .size-opt {
+    position: relative;
+  }
+  .classic-sizes .size-opt input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .classic-sizes .size-opt .size-lbl {
+    display: inline-block;
+    min-width: 42px;
+    padding: 5px 14px;
+    border: 1px solid #d5cec4;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    background: #fff;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .classic-sizes .size-opt .size-lbl:hover {
+    border-color: #B88646;
+    color: #B88646;
+  }
+  .classic-sizes .size-opt input[type="radio"]:checked + .size-lbl {
+    border-color: #B88646;
+    background: #B88646;
+    color: #fff;
+  }
+
+  /* Buttons */
+  .classic-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .btn-buy-classic {
+    flex: 1;
+    min-width: 130px;
+    background: #B88646 !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    border-radius: 3px;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .btn-buy-classic:hover,
+  .btn-buy-classic:focus {
+    background: #a07638 !important;
+    color: #fff !important;
+  }
+  .btn-cart-classic {
+    flex: 1;
+    min-width: 130px;
+    background: #fff !important;
+    border: 1.5px solid #B88646 !important;
+    color: #B88646 !important;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 11px 20px;
+    border-radius: 3px;
+    transition: background 0.2s, color 0.2s;
+    text-align: center;
+  }
+  .btn-cart-classic:hover,
+  .btn-cart-classic:focus {
+    background: #B88646 !important;
+    color: #fff !important;
+  }
+
+  /* Assurance strip */
+  .classic-assurance {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #ece6de;
+    flex-wrap: wrap;
+  }
+  .classic-assurance .assurance-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #aaa;
+    font-weight: 500;
+  }
+  .classic-assurance .assurance-item i {
+    font-size: 13px;
+    color: #B88646;
+  }
+
+  /* Alert */
+  .classic-product-info .alert {
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .classic-gallery { padding: 14px; }
+    .classic-product-info { padding: 20px; border-left: none; border-top: 1px solid #ece6de; }
+    .classic-product-info .product-title { font-size: 20px; }
+    .classic-price-row .price-amount { font-size: 24px; }
+    .classic-actions { flex-direction: column; }
   }
 </style>
 
-<section class="section-content padding-y bg">
+<section class="section-content padding-y classic-product-section">
   <div class="container">
     <div class="row">
 
       {% include "base/sidebar.html" %}
 
       <div class="col-md-9">
-    <!-- ============================ COMPONENT 1 ================================= -->
-    <div class="card">
-      <div class="row no-gutters">
-        <aside class="col-md-6">
-          <article class="gallery-wrap">
-            <div class="img-big-wrap">
-              <div>
-                <a href="#"
-                  ><img
+        <div class="card classic-product-card">
+          <div class="row no-gutters">
+
+            <!-- Gallery -->
+            <aside class="col-md-6">
+              <div class="classic-gallery">
+                <div class="main-img-frame">
+                  <img
                     id="main-product-image"
                     src="/media/{{product.product_images.first.product_image}}"
-                /></a>
-              </div>
-            </div>
-            <!-- slider-product.// -->
-            <div class="thumbs-wrap">
-              {% for image in product.product_images.all %}
-              <a
-                href="#"
-                class="item-thumb {% if forloop.first %}active{% endif %}"
-                data-image="/media/{{image.product_image}}"
-              >
-                <img src="/media/{{image.product_image}}"
-              /></a>
-
-              {% endfor %}
-            </div>
-            <!-- slider-nav.// -->
-          </article>
-          <!-- gallery-wrap .end// -->
-        </aside>
-        <main class="col-md-6 border-left">
-          <article class="content-body">
-            <h2 class="title">{{product.product_name}}</h2>
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-danger mt-2">{{ message }}</div>
-            {% endfor %}
-            {% endif %}
-
-            <div class="rating-wrap my-3">
-              <ul class="rating-stars">
-                <li style="width: 80%" class="stars-active">
-                  <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                </li>
-                <li>
-                  <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                </li>
-              </ul>
-              <small class="label-rating text-muted">132 reviews</small>
-              <small class="label-rating text-success">
-                <i class="fa fa-clipboard-check"></i> 154 orders
-              </small>
-            </div>
-            <!-- rating-wrap.// -->
-
-            <div class="mb-3">
-              <var class="price h4">${{ product.price|floatformat:2 }}</var>
-              <span class="text-muted">/per kg</span>
-            </div>
-            <!-- price-detail-wrap .// -->
-
-            <p>{{product.product_description}}</p>
-
-            <dl class="row">
-              <dt class="col-sm-3">Model#</dt>
-              <dd class="col-sm-9">Odsy-1000</dd>
-
-              <dt class="col-sm-3">Color</dt>
-              <dd class="col-sm-9">Brown</dd>
-
-              <dt class="col-sm-3">Delivery</dt>
-              <dd class="col-sm-9">Russia, USA, and Europe</dd>
-            </dl>
-
-            <hr />
-            <form method="POST" action="{% url 'add_to_cart' product.slug %}">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{{ request.path }}" />
-              <div class="form-row">
-              <div class="form-group col-md flex-grow-0">
-                <label>Quantity</label>
-                <div class="input-group mb-3 input-spinner quantity-spinner">
-                  <div class="input-group-prepend">
-                    <button
-                      class="btn btn-light"
-                      type="button"
-                      id="button-plus"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <input
-                    type="number"
-                    name="quantity"
-                    class="form-control"
-                    value="1"
-                    min="1"
-                    id="quantity-input"
+                    alt="{{product.product_name}}"
                   />
-                  <div class="input-group-append">
-                    <button
-                      class="btn btn-light"
-                      type="button"
-                      id="button-minus"
-                    >
-                      −
-                    </button>
-                  </div>
                 </div>
-              </div>
-              <!-- col.// -->
-              {% if product.size_variant.count %}
-              <div class="form-group col-md">
-                <label>Select size</label>
-                <div class="mt-1">
-                  {% for size in product.size_variant.all %}
-                  <label
-                    class="custom-control custom-radio custom-control-inline"
+                <div class="classic-thumbs">
+                  {% for image in product.product_images.all %}
+                  <a
+                    href="#"
+                    class="thumb-item {% if forloop.first %}active{% endif %}"
+                    data-image="/media/{{image.product_image}}"
                   >
-                    <input
-                      type="radio"
-                      name="select_size"
-                      value="{{ size.size_name }}"
-                      class="custom-control-input"
-                      {%
-                      if
-                      forloop.first
-                      %}checked{%
-                      endif
-                      %}
-                      required
-                    />
-                    <div class="custom-control-label">{{ size.size_name }}</div>
-                  </label>
+                    <img src="/media/{{image.product_image}}" alt="thumb" />
+                  </a>
                   {% endfor %}
                 </div>
               </div>
-              {% endif %}
-              <!-- col.// -->
-              </div>
-            <!-- row.// -->
+            </aside>
 
-            <button
-              type="submit"
-              class="btn btn-primary"
-              formaction="{% url 'buy_now' product.slug %}"
-            >
-              Buy now
-            </button>
-            <button type="submit" class="btn btn-outline-primary">
-              <span class="text">Add to cart</span>
-              <i class="fas fa-shopping-cart"></i>
-            </button>
-            </form>
-          </article>
-          <!-- product-info-aside .// -->
-        </main>
-        <!-- col.// -->
+            <!-- Product Info -->
+            <main class="col-md-6">
+              <div class="classic-product-info">
+
+                <h1 class="product-title">{{product.product_name}}</h1>
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-danger mt-1 mb-2">{{ message }}</div>
+                {% endfor %}
+                {% endif %}
+
+                <!-- Rating -->
+                <div class="classic-rating">
+                  <span class="stars">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half-alt"></i>
+                  </span>
+                  <span class="review-count">132 reviews</span>
+                  <span class="orders-count">
+                    <i class="fa fa-clipboard-check"></i> 154 orders
+                  </span>
+                </div>
+
+                <!-- Price -->
+                <div class="classic-price-row">
+                  <span class="price-amount">${{ product.price|floatformat:2 }}</span>
+                  <span class="price-unit">/ per kg</span>
+                </div>
+
+                <!-- Description -->
+                <p class="classic-description">{{product.product_description}}</p>
+
+                <!-- Specs -->
+                <table class="classic-specs">
+                  <tr>
+                    <td class="spec-dt">Model #</td>
+                    <td class="spec-dd">Odsy-1000</td>
+                  </tr>
+                  <tr>
+                    <td class="spec-dt">Color</td>
+                    <td class="spec-dd">Brown</td>
+                  </tr>
+                  <tr>
+                    <td class="spec-dt">Delivery</td>
+                    <td class="spec-dd">Russia, USA &amp; Europe</td>
+                  </tr>
+                </table>
+
+                <hr class="classic-hr" />
+
+                <!-- Form -->
+                <form method="POST" action="{% url 'add_to_cart' product.slug %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}" />
+
+                  <div class="d-flex align-items-start flex-wrap" style="gap: 22px;">
+                    <!-- Quantity -->
+                    <div>
+                      <span class="classic-label">Quantity</span>
+                      <div class="classic-qty-group">
+                        <button class="qty-btn" type="button" id="button-minus">−</button>
+                        <input
+                          type="number"
+                          name="quantity"
+                          class="form-control"
+                          value="1"
+                          min="1"
+                          id="quantity-input"
+                        />
+                        <button class="qty-btn" type="button" id="button-plus">+</button>
+                      </div>
+                    </div>
+
+                    <!-- Size -->
+                    {% if product.size_variant.count %}
+                    <div>
+                      <span class="classic-label">Size</span>
+                      <div class="classic-sizes">
+                        {% for size in product.size_variant.all %}
+                        <label class="size-opt">
+                          <input
+                            type="radio"
+                            name="select_size"
+                            value="{{ size.size_name }}"
+                            {% if forloop.first %}checked{% endif %}
+                            required
+                          />
+                          <span class="size-lbl">{{ size.size_name }}</span>
+                        </label>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <!-- Buttons -->
+                  <div class="classic-actions">
+                    <button
+                      type="submit"
+                      class="btn btn-buy-classic"
+                      formaction="{% url 'buy_now' product.slug %}"
+                    >
+                      Buy Now
+                    </button>
+                    <button type="submit" class="btn btn-cart-classic">
+                      <i class="fas fa-shopping-cart" style="margin-right:5px;"></i>Add to Cart
+                    </button>
+                  </div>
+                </form>
+
+                <!-- Assurance -->
+                <div class="classic-assurance">
+                  <span class="assurance-item">
+                    <i class="fas fa-shield-alt"></i> Secure Payment
+                  </span>
+                  <span class="assurance-item">
+                    <i class="fas fa-undo"></i> Easy Returns
+                  </span>
+                  <span class="assurance-item">
+                    <i class="fas fa-truck"></i> Free Shipping
+                  </span>
+                </div>
+
+              </div>
+            </main>
+          </div>
+        </div>
       </div>
-      <!-- row.// -->
     </div>
-    <!-- card.// -->
-    <!-- ============================ COMPONENT 1 END .// ================================= -->
-      </div>
-      <!-- col-md-9.// -->
-    </div>
-    <!-- row.// -->
   </div>
 </section>
 
 <script>
   (function () {
     var mainImage = document.getElementById("main-product-image");
-    var thumbs = document.querySelectorAll(".thumbs-wrap .item-thumb");
+    var thumbs = document.querySelectorAll(".classic-thumbs .thumb-item");
 
     thumbs.forEach(function (thumb) {
       thumb.addEventListener("click", function (event) {
@@ -226,7 +535,6 @@
         if (mainImage && selectedImage) {
           mainImage.src = selectedImage;
         }
-
         thumbs.forEach(function (item) {
           item.classList.remove("active");
         });

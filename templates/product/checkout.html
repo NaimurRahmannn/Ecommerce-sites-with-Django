@@ -1,135 +1,543 @@
 {% extends "base/base.html" %} {% block start %}
 
-<section class="section-content padding-y bg">
+<style>
+  /* ===== Premium Checkout Styles ===== */
+  .premium-checkout-section {
+    background: linear-gradient(135deg, #f5f0ea 0%, #f8f9fa 100%);
+    min-height: 70vh;
+  }
+
+  /* Page header */
+  .checkout-page-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  .checkout-page-header i {
+    font-size: 26px;
+    color: #B88646;
+    margin-right: 14px;
+  }
+  .checkout-page-header h4 {
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+
+  /* Step indicators */
+  .checkout-steps {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+  }
+  .checkout-step {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    position: relative;
+    font-size: 13px;
+    font-weight: 600;
+    color: #bbb;
+    letter-spacing: 0.4px;
+  }
+  .checkout-step.active {
+    color: #B88646;
+  }
+  .checkout-step .step-num {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 6px;
+    background: #eee;
+    color: #bbb;
+    transition: all 0.3s;
+  }
+  .checkout-step.active .step-num {
+    background: linear-gradient(135deg, #B88646, #d4a55a);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(184,134,70,0.25);
+  }
+  .checkout-step::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 50%;
+    height: 2px;
+    background: #eee;
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+  .checkout-step::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background: #eee;
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+  .checkout-step:first-child::before,
+  .checkout-step:last-child::after {
+    display: none;
+  }
+  .checkout-step.active::before,
+  .checkout-step.active::after {
+    background: #e8dcc8;
+  }
+
+  /* Form cards */
+  .checkout-form-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+  }
+  .checkout-form-card:hover {
+    box-shadow: 0 6px 30px rgba(0,0,0,0.08);
+  }
+  .checkout-form-card .card-body {
+    padding: 28px 30px;
+  }
+
+  .checkout-card-title {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 17px;
+    color: #222;
+    margin-bottom: 22px;
+    letter-spacing: 0.3px;
+  }
+  .checkout-card-title i {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-right: 12px;
+    color: #fff;
+  }
+  .checkout-card-title .icon-contact {
+    background: linear-gradient(135deg, #B88646, #d4a55a);
+  }
+  .checkout-card-title .icon-shipping {
+    background: linear-gradient(135deg, #B88646, #d4a55a);
+  }
+  .checkout-card-title .icon-payment {
+    background: linear-gradient(135deg, #B88646, #d4a55a);
+  }
+
+  /* Form inputs */
+  .checkout-form-card label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+  }
+  .checkout-form-card .form-control {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .checkout-form-card .form-control:focus {
+    border-color: #B88646;
+    box-shadow: 0 0 0 3px rgba(184,134,70,0.1);
+  }
+  .checkout-form-card .form-control::placeholder {
+    color: #ccc;
+  }
+
+  /* ===== Order Summary Sidebar ===== */
+  .checkout-summary-card {
+    border: none;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    padding: 28px 26px;
+    position: sticky;
+    top: 20px;
+  }
+  .checkout-summary-card .summary-title {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 17px;
+    color: #222;
+    margin-bottom: 22px;
+    letter-spacing: 0.3px;
+  }
+  .checkout-summary-card .summary-title i {
+    color: #B88646;
+    margin-right: 10px;
+    font-size: 18px;
+  }
+
+  /* Order items */
+  .checkout-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0ebe3;
+  }
+  .checkout-item:last-of-type {
+    border-bottom: none;
+    margin-bottom: 8px;
+  }
+  .checkout-item-img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #f0ebe3;
+    flex-shrink: 0;
+  }
+  .checkout-item-info {
+    flex: 1;
+    margin-left: 14px;
+  }
+  .checkout-item-info .item-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #222;
+    margin-bottom: 2px;
+    line-height: 1.3;
+  }
+  .checkout-item-info .item-meta {
+    font-size: 12px;
+    color: #aaa;
+  }
+  .checkout-item-info .item-meta span {
+    margin-right: 8px;
+  }
+  .checkout-item-price {
+    font-weight: 700;
+    font-size: 14px;
+    color: #222;
+    flex-shrink: 0;
+    margin-left: 10px;
+  }
+
+  /* Summary rows */
+  .checkout-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+  }
+  .checkout-summary-row .label {
+    color: #888;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .checkout-summary-row .value {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  .checkout-summary-divider {
+    border: none;
+    border-top: 2px solid #e8dcc8;
+    margin: 10px 0 12px;
+  }
+  .checkout-summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0 0;
+  }
+  .checkout-summary-total .total-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+  }
+  .checkout-summary-total .total-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #B88646;
+    letter-spacing: -0.5px;
+  }
+
+  /* Place order button */
+  .btn-place-order {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #B88646 0%, #d4a55a 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.8px;
+    padding: 14px 0;
+    border-radius: 12px;
+    margin-top: 20px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(184,134,70,0.25);
+    text-align: center;
+  }
+  .btn-place-order:hover,
+  .btn-place-order:focus {
+    background: linear-gradient(135deg, #a37536 0%, #B88646 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 24px rgba(184,134,70,0.35);
+    transform: translateY(-1px);
+  }
+  .btn-back-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 12px;
+    padding: 10px 0;
+    border-radius: 10px;
+    border: 2px solid #e8dcc8 !important;
+    background: transparent !important;
+    color: #B88646 !important;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .btn-back-link:hover {
+    background: #faf6f0 !important;
+    border-color: #B88646 !important;
+    text-decoration: none;
+    color: #a37536 !important;
+  }
+
+  .checkout-secure-note {
+    text-align: center;
+    color: #bbb;
+    font-size: 12px;
+    margin-top: 16px;
+  }
+  .checkout-secure-note i {
+    color: #B88646;
+    margin-right: 4px;
+  }
+
+  /* Payment icons row */
+  .payment-icons {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .payment-icons .pay-icon {
+    width: 46px;
+    height: 30px;
+    border-radius: 6px;
+    border: 1.5px solid #eee;
+    background: #fafafa;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: #888;
+    transition: border-color 0.2s;
+  }
+  .payment-icons .pay-icon:hover {
+    border-color: #B88646;
+    color: #B88646;
+  }
+</style>
+
+<section class="section-content padding-y premium-checkout-section">
   <div class="container">
+
+    <!-- Page header -->
+    <div class="checkout-page-header">
+      <i class="fas fa-credit-card"></i>
+      <h4>Checkout</h4>
+    </div>
+
+    <!-- Step indicators -->
+    <div class="checkout-steps">
+      <div class="checkout-step active">
+        <span class="step-num">1</span> Contact
+      </div>
+      <div class="checkout-step active">
+        <span class="step-num">2</span> Shipping
+      </div>
+      <div class="checkout-step active">
+        <span class="step-num">3</span> Payment
+      </div>
+    </div>
+
     <div class="row">
-      <div class="col-lg-8">
-        <div class="card mb-3">
+      <!-- Left column: Forms -->
+      <div class="col-lg-8 mb-4">
+
+        <!-- Contact -->
+        <div class="card checkout-form-card">
           <div class="card-body">
-            <h5 class="card-title mb-3">Contact</h5>
+            <div class="checkout-card-title">
+              <i class="fas fa-envelope icon-contact"></i> Contact Information
+            </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label>Email</label>
+                <label>Email Address</label>
                 <input type="email" class="form-control" placeholder="you@example.com" />
               </div>
               <div class="form-group col-md-6">
-                <label>Phone</label>
+                <label>Phone Number</label>
                 <input type="text" class="form-control" placeholder="+1 555 000 0000" />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card mb-3">
+        <!-- Shipping -->
+        <div class="card checkout-form-card">
           <div class="card-body">
-            <h5 class="card-title mb-3">Shipping Address</h5>
+            <div class="checkout-card-title">
+              <i class="fas fa-truck icon-shipping"></i> Shipping Address
+            </div>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label>First Name</label>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" placeholder="John" />
               </div>
               <div class="form-group col-md-6">
                 <label>Last Name</label>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" placeholder="Doe" />
               </div>
             </div>
             <div class="form-group">
               <label>Street Address</label>
-              <input type="text" class="form-control" />
+              <input type="text" class="form-control" placeholder="123 Main St, Apt 4B" />
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
                 <label>City</label>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" placeholder="New York" />
               </div>
               <div class="form-group col-md-4">
                 <label>State</label>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" placeholder="NY" />
               </div>
               <div class="form-group col-md-4">
-                <label>ZIP</label>
-                <input type="text" class="form-control" />
+                <label>ZIP Code</label>
+                <input type="text" class="form-control" placeholder="10001" />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card mb-3">
+        <!-- Payment -->
+        <div class="card checkout-form-card">
           <div class="card-body">
-            <h5 class="card-title mb-3">Payment</h5>
+            <div class="checkout-card-title">
+              <i class="fas fa-lock icon-payment"></i> Payment Details
+            </div>
             <div class="form-group">
               <label>Card Number</label>
-              <input type="text" class="form-control" placeholder="1234 5678 9012 3456" />
+              <input type="text" class="form-control" placeholder="1234  5678  9012  3456" />
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label>Expiry</label>
-                <input type="text" class="form-control" placeholder="MM/YY" />
+                <label>Expiry Date</label>
+                <input type="text" class="form-control" placeholder="MM / YY" />
               </div>
               <div class="form-group col-md-4">
                 <label>CVV</label>
-                <input type="password" class="form-control" placeholder="***" />
+                <input type="password" class="form-control" placeholder="&#9679;&#9679;&#9679;" />
               </div>
               <div class="form-group col-md-4">
                 <label>Name on Card</label>
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control" placeholder="John Doe" />
               </div>
+            </div>
+            <div class="payment-icons">
+              <span class="pay-icon"><i class="fab fa-cc-visa"></i></span>
+              <span class="pay-icon"><i class="fab fa-cc-mastercard"></i></span>
+              <span class="pay-icon"><i class="fab fa-cc-amex"></i></span>
+              <span class="pay-icon"><i class="fab fa-cc-paypal"></i></span>
             </div>
           </div>
         </div>
+
       </div>
 
-      <div class="col-lg-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title mb-3">Order Summary</h5>
+      <!-- Right column: Order Summary -->
+      <div class="col-lg-4 mb-4">
+        <div class="checkout-summary-card">
+          <div class="summary-title">
+            <i class="fas fa-receipt"></i> Order Summary
+          </div>
 
-            {% for item in checkout_items %}
-            <figure class="itemside mb-3">
-              <div class="aside">
-                <img
-                  src="/media/{{ item.product.product_images.first.product_image }}"
-                  class="img-sm"
-                />
+          {% for item in checkout_items %}
+          <div class="checkout-item">
+            <img
+              src="/media/{{ item.product.product_images.first.product_image }}"
+              class="checkout-item-img"
+              alt="{{ item.product.product_name }}"
+            />
+            <div class="checkout-item-info">
+              <div class="item-name">{{ item.product.product_name }}</div>
+              <div class="item-meta">
+                {% if item.size %}<span>Size: {{ item.size }}</span>{% endif %}
+                <span>Qty: {{ item.quantity }}</span>
               </div>
-              <figcaption class="info">
-                <p class="title mb-1">{{ item.product.product_name }}</p>
-                {% if item.size %}
-                <small class="text-muted d-block">Size: {{ item.size }}</small>
-                {% endif %}
-                <small class="text-muted d-block">Qty: {{ item.quantity }}</small>
-                <small class="text-muted d-block">${{ item.product.price|floatformat:2 }} each</small>
-              </figcaption>
-            </figure>
-            {% endfor %}
+            </div>
+            <div class="checkout-item-price">${{ item.line_total|floatformat:2 }}</div>
+          </div>
+          {% endfor %}
 
-            <dl class="dlist-align">
-              <dt>Subtotal:</dt>
-              <dd class="text-right">${{ subtotal|floatformat:2 }}</dd>
-            </dl>
-            <dl class="dlist-align">
-              <dt>Shipping:</dt>
-              <dd class="text-right">${{ shipping|floatformat:2 }}</dd>
-            </dl>
-            <hr />
-            <dl class="dlist-align">
-              <dt><strong>Total:</strong></dt>
-              <dd class="text-right"><strong>${{ total|floatformat:2 }}</strong></dd>
-            </dl>
+          <hr class="checkout-summary-divider" />
 
-            <button class="btn btn-primary btn-block">Place Order</button>
-            {% if back_url == "get_product" %}
-            <a href="{% url back_url back_url_kwargs.slug %}" class="btn btn-light btn-block">
-              Back to product
-            </a>
-            {% else %}
-            <a href="{% url back_url %}" class="btn btn-light btn-block">
-              Back to cart
-            </a>
-            {% endif %}
+          <div class="checkout-summary-row">
+            <span class="label">Subtotal</span>
+            <span class="value">${{ subtotal|floatformat:2 }}</span>
+          </div>
+          <div class="checkout-summary-row">
+            <span class="label">Shipping</span>
+            <span class="value" style="color:#00b517;">${{ shipping|floatformat:2 }}</span>
+          </div>
+
+          <hr class="checkout-summary-divider" />
+
+          <div class="checkout-summary-total">
+            <span class="total-label">Total</span>
+            <span class="total-value">${{ total|floatformat:2 }}</span>
+          </div>
+
+          <button class="btn btn-place-order">
+            <i class="fas fa-lock" style="margin-right:6px; font-size:14px;"></i>
+            Place Order
+          </button>
+
+          {% if back_url == "get_product" %}
+          <a href="{% url back_url back_url_kwargs.slug %}" class="btn btn-back-link">
+            <i class="fas fa-arrow-left" style="margin-right:6px; font-size:12px;"></i>
+            Back to Product
+          </a>
+          {% else %}
+          <a href="{% url back_url %}" class="btn btn-back-link">
+            <i class="fas fa-arrow-left" style="margin-right:6px; font-size:12px;"></i>
+            Back to Cart
+          </a>
+          {% endif %}
+
+          <div class="checkout-secure-note">
+            <i class="fas fa-shield-alt"></i> 256-bit SSL secure checkout
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
