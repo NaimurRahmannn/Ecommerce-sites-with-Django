@@ -44,76 +44,156 @@
 
       /* ===== Top Bar ===== */
       .hf-topbar {
-        background: #1a1714;
+        background: linear-gradient(90deg, #1a1714 0%, #231e19 100%);
+        border-bottom: 1px solid rgba(184,134,70,0.15);
+        position: relative;
+        z-index: 101;
       }
       .hf-topbar .container {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 34px;
+        height: 36px;
       }
+
+      /* Left nav links */
       .hf-topbar-links {
         list-style: none;
         margin: 0;
         padding: 0;
         display: flex;
-        gap: 22px;
+        align-items: center;
+        gap: 4px;
       }
-      .hf-topbar-links a {
+      .hf-topbar-links li a {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
         font-size: 11.5px;
-        color: rgba(255,255,255,0.45);
+        font-weight: 500;
+        color: rgba(255,255,255,0.50);
         text-decoration: none;
         letter-spacing: 0.3px;
-        transition: color 0.2s;
+        padding: 4px 12px;
+        border-radius: 3px;
+        transition: color 0.2s, background 0.2s;
       }
-      .hf-topbar-links a:hover {
+      .hf-topbar-links li a:hover {
         color: #B88646;
+        background: rgba(184,134,70,0.08);
       }
+      .hf-topbar-links li a .tb-ico {
+        font-size: 10px;
+        color: #B88646;
+        opacity: 0.7;
+      }
+      .hf-topbar-links li a:hover .tb-ico {
+        opacity: 1;
+      }
+      /* Separator dots */
+      .hf-topbar-links .tb-dot {
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.12);
+        flex-shrink: 0;
+      }
+
+      /* Center promo */
+      .hf-topbar-promo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 11px;
+        color: rgba(255,255,255,0.35);
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+      .hf-topbar-promo span {
+        color: #B88646;
+        font-weight: 600;
+      }
+
+      /* Right section */
       .hf-topbar-right {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 14px;
       }
       .hf-topbar-right .hf-phone {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         font-size: 11.5px;
-        color: rgba(255,255,255,0.40);
+        color: rgba(255,255,255,0.45);
+        transition: color 0.2s;
       }
-      .hf-topbar-right .hf-phone i {
+      .hf-topbar-right .hf-phone:hover {
+        color: rgba(255,255,255,0.70);
+      }
+      .hf-topbar-right .hf-phone .phone-icon-wrap {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(184,134,70,0.15);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hf-topbar-right .hf-phone .phone-icon-wrap i {
+        font-size: 9px;
         color: #B88646;
-        margin-right: 4px;
-        font-size: 10px;
       }
+
+      /* Topbar vertical divider */
+      .hf-topbar-right .tb-sep {
+        width: 1px;
+        height: 16px;
+        background: rgba(255,255,255,0.08);
+      }
+
       .hf-topbar-right .hf-lang-btn {
         background: none;
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 3px;
+        border-radius: 20px;
         color: rgba(255,255,255,0.48);
-        font-size: 11.5px;
-        padding: 2px 9px;
+        font-size: 11px;
+        padding: 3px 10px 3px 8px;
         cursor: pointer;
-        transition: border-color 0.2s, color 0.2s;
+        transition: border-color 0.2s, color 0.2s, background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
       }
       .hf-topbar-right .hf-lang-btn:hover {
-        border-color: #B88646;
+        border-color: rgba(184,134,70,0.30);
+        color: #B88646;
+        background: rgba(184,134,70,0.06);
+      }
+      .hf-topbar-right .hf-lang-btn .fa-globe {
+        font-size: 11px;
         color: #B88646;
       }
       .hf-topbar-right .hf-lang-btn .fa-chevron-down {
-        margin-left: 3px;
-        font-size: 8px;
+        font-size: 7px;
+        opacity: 0.5;
+        margin-left: 1px;
       }
       .hf-topbar-right .dropdown-menu {
-        min-width: 100px;
+        min-width: 110px;
         background: #2b2218;
         border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 4px;
-        margin-top: 4px;
-        padding: 4px 0;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        border-radius: 6px;
+        margin-top: 6px;
+        padding: 6px 0;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.30);
       }
       .hf-topbar-right .dropdown-menu .dropdown-item {
         font-size: 12px;
         color: rgba(255,255,255,0.55);
-        padding: 5px 14px;
+        padding: 6px 16px;
+        transition: color 0.15s, background 0.15s;
       }
       .hf-topbar-right .dropdown-menu .dropdown-item:hover {
         background: rgba(184,134,70,0.12);
@@ -493,17 +573,26 @@
       <div class="hf-topbar">
         <div class="container">
           <ul class="hf-topbar-links d-none d-md-flex">
-            <li><a href="/">Home</a></li>
-            <li><a href="#">Delivery</a></li>
-            <li><a href="#">Payment</a></li>
+            <li><a href="/"><i class="fas fa-home tb-ico"></i> Home</a></li>
+            <li class="tb-dot"></li>
+            <li><a href="#"><i class="fas fa-store tb-ico"></i> Shop</a></li>
+            <li class="tb-dot"></li>
+            <li><a href="#"><i class="fas fa-envelope tb-ico"></i> Contact</a></li>
           </ul>
+
+          <div class="hf-topbar-promo d-none d-lg-block">
+            Free shipping on orders over <span>$50</span>
+          </div>
+
           <div class="hf-topbar-right">
             <span class="hf-phone d-none d-sm-inline">
-              <i class="fas fa-phone-alt"></i> +998 12 345 678
+              <span class="phone-icon-wrap"><i class="fas fa-mobile-alt"></i></span>
+              +998 12 345 678
             </span>
+            <span class="tb-sep d-none d-sm-inline"></span>
             <div class="dropdown">
               <button class="hf-lang-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-globe" style="margin-right:4px;"></i> English <i class="fas fa-chevron-down"></i>
+                <i class="fas fa-globe"></i> English <i class="fas fa-chevron-down"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-right">
                 <li><a class="dropdown-item" href="#">Arabic</a></li>
