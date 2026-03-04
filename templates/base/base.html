@@ -122,14 +122,14 @@
                   </span>
                 </div>
                 <div class="widget-header icontext">
-                  <a href="#" class="icon icon-sm rounded-circle border"
+                  <a href="{% url 'login' %}" class="icon icon-sm rounded-circle border"
                     ><i class="fa fa-user"></i
                   ></a>
                   <div class="text">
                     <span class="text-muted">Welcome!</span>
                     <div>
-                      <a href="#">Sign in</a> |
-                      <a href="#"> Register</a>
+                      <a href="{% url 'login' %}">Sign in</a> |
+                      <a href="{% url 'register' %}"> Register</a>
                     </div>
                   </div>
                 </div>
