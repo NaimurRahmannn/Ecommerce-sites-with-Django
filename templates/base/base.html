@@ -37,6 +37,445 @@
     <!-- custom javascript -->
     <script src="/media/js/script.js" type="text/javascript"></script>
 
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+      body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+      /* ===== Top Bar ===== */
+      .hf-topbar {
+        background: #1a1714;
+      }
+      .hf-topbar .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 34px;
+      }
+      .hf-topbar-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 22px;
+      }
+      .hf-topbar-links a {
+        font-size: 11.5px;
+        color: rgba(255,255,255,0.45);
+        text-decoration: none;
+        letter-spacing: 0.3px;
+        transition: color 0.2s;
+      }
+      .hf-topbar-links a:hover {
+        color: #B88646;
+      }
+      .hf-topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .hf-topbar-right .hf-phone {
+        font-size: 11.5px;
+        color: rgba(255,255,255,0.40);
+      }
+      .hf-topbar-right .hf-phone i {
+        color: #B88646;
+        margin-right: 4px;
+        font-size: 10px;
+      }
+      .hf-topbar-right .hf-lang-btn {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 3px;
+        color: rgba(255,255,255,0.48);
+        font-size: 11.5px;
+        padding: 2px 9px;
+        cursor: pointer;
+        transition: border-color 0.2s, color 0.2s;
+      }
+      .hf-topbar-right .hf-lang-btn:hover {
+        border-color: #B88646;
+        color: #B88646;
+      }
+      .hf-topbar-right .hf-lang-btn .fa-chevron-down {
+        margin-left: 3px;
+        font-size: 8px;
+      }
+      .hf-topbar-right .dropdown-menu {
+        min-width: 100px;
+        background: #2b2218;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 4px;
+        margin-top: 4px;
+        padding: 4px 0;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      }
+      .hf-topbar-right .dropdown-menu .dropdown-item {
+        font-size: 12px;
+        color: rgba(255,255,255,0.55);
+        padding: 5px 14px;
+      }
+      .hf-topbar-right .dropdown-menu .dropdown-item:hover {
+        background: rgba(184,134,70,0.12);
+        color: #B88646;
+      }
+
+      /* ===== Main Header ===== */
+      .hf-header-main {
+        background: #fff;
+        box-shadow: 0 1px 6px rgba(43,34,24,0.06);
+        position: relative;
+        z-index: 100;
+        height: 64px;
+        overflow: visible;
+      }
+      .hf-header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        gap: 28px;
+      }
+
+      /* Logo */
+      .hf-brand {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        position: relative;
+        z-index: 101;
+      }
+      .hf-brand img {
+        height: 90px;
+        width: auto;
+        display: block;
+        filter: drop-shadow(0 2px 6px rgba(43,34,24,0.08));
+      }
+
+      /* Search */
+      .hf-search {
+        flex: 1;
+        max-width: 480px;
+        position: relative;
+      }
+      .hf-search-input {
+        width: 100%;
+        height: 40px;
+        padding: 0 42px 0 16px;
+        border: 1.5px solid #e8e2d9;
+        border-radius: 40px;
+        font-size: 13.5px;
+        color: #2b2218;
+        background: #faf8f5;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      }
+      .hf-search-input::placeholder {
+        color: #c0b5a4;
+        font-size: 13px;
+      }
+      .hf-search-input:focus {
+        border-color: #B88646;
+        box-shadow: 0 0 0 3px rgba(184,134,70,0.08);
+        background: #fff;
+      }
+      .hf-search-btn {
+        position: absolute;
+        top: 50%;
+        right: 4px;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #B88646;
+        border: none;
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, box-shadow 0.2s;
+      }
+      .hf-search-btn:hover {
+        background: #a07638;
+        box-shadow: 0 2px 8px rgba(184,134,70,0.28);
+      }
+
+      /* Action widgets */
+      .hf-actions {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+      .hf-action-item {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 8px;
+        transition: background 0.18s;
+        position: relative;
+      }
+      .hf-action-item:hover {
+        background: #f7f4f0;
+        text-decoration: none;
+      }
+      .hf-action-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 14px;
+        transition: background 0.18s, color 0.18s;
+      }
+
+      /* Cart icon */
+      .hf-cart-icon {
+        background: rgba(184,134,70,0.10);
+        color: #B88646;
+        position: relative;
+      }
+      .hf-action-item:hover .hf-cart-icon {
+        background: #B88646;
+        color: #fff;
+      }
+      .hf-cart-badge {
+        position: absolute;
+        top: -3px;
+        right: -5px;
+        background: #d9534f;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        min-width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #fff;
+        line-height: 1;
+        padding: 0 3px;
+      }
+      .hf-action-label {
+        margin-left: 8px;
+      }
+      .hf-action-label .label-top {
+        font-size: 10.5px;
+        color: #aaa;
+        display: block;
+        line-height: 1.1;
+      }
+      .hf-action-label .label-bottom {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #2b2218;
+        display: block;
+        line-height: 1.3;
+        white-space: nowrap;
+      }
+
+      /* User icon */
+      .hf-user-icon {
+        background: #f0ebe4;
+        color: #8a7560;
+      }
+      .hf-action-item:hover .hf-user-icon {
+        background: #2b2218;
+        color: #fff;
+      }
+
+      /* Divider between actions */
+      .hf-action-divider {
+        width: 1px;
+        height: 26px;
+        background: #e8e2d9;
+        margin: 0 2px;
+      }
+
+      /* ===== Hamburger Menu Button (mobile only) ===== */
+      .hf-menu-toggle {
+        display: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: #f7f4f0;
+        border: none;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.18s;
+        padding: 0;
+        position: relative;
+      }
+      .hf-menu-toggle:hover {
+        background: #ece6de;
+      }
+      .hf-menu-toggle .bar {
+        display: block;
+        width: 18px;
+        height: 2px;
+        background: #2b2218;
+        border-radius: 2px;
+        transition: transform 0.3s, opacity 0.3s;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .hf-menu-toggle .bar:nth-child(1) { top: 10px; }
+      .hf-menu-toggle .bar:nth-child(2) { top: 17px; }
+      .hf-menu-toggle .bar:nth-child(3) { top: 24px; }
+      /* Animate to X when open */
+      .hf-menu-toggle.is-open .bar:nth-child(1) {
+        top: 17px;
+        transform: translateX(-50%) rotate(45deg);
+      }
+      .hf-menu-toggle.is-open .bar:nth-child(2) {
+        opacity: 0;
+      }
+      .hf-menu-toggle.is-open .bar:nth-child(3) {
+        top: 17px;
+        transform: translateX(-50%) rotate(-45deg);
+      }
+
+      /* ===== Mobile Sidebar Overlay ===== */
+      .hf-sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(26, 23, 20, 0.45);
+        z-index: 9998;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(2px);
+      }
+      .hf-sidebar-overlay.is-visible {
+        opacity: 1;
+      }
+
+      .hf-mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        max-width: 85vw;
+        height: 100%;
+        background: #fff;
+        z-index: 9999;
+        transform: translateX(-100%);
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        display: none;
+      }
+      .hf-mobile-sidebar.is-open {
+        transform: translateX(0);
+      }
+
+      /* Mobile sidebar header */
+      .hf-msb-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px;
+        border-bottom: 1px solid #ece6de;
+        background: #fdfcfa;
+      }
+      .hf-msb-header .msb-logo img {
+        height: 40px;
+        width: auto;
+      }
+      .hf-msb-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #f0ebe4;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #6F6762;
+        transition: background 0.2s, color 0.2s;
+      }
+      .hf-msb-close:hover {
+        background: #2b2218;
+        color: #fff;
+      }
+
+      /* Mobile sidebar body (sidebar-nav will be cloned here) */
+      .hf-msb-body {
+        padding: 8px 0;
+      }
+      .hf-msb-body .sidebar-nav {
+        border-right: none;
+        position: static;
+        padding: 10px 14px;
+      }
+
+      /* Mobile sidebar footer */
+      .hf-msb-footer {
+        padding: 16px 18px;
+        border-top: 1px solid #ece6de;
+        margin-top: auto;
+      }
+      .hf-msb-footer a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 0;
+        font-size: 13.5px;
+        font-weight: 500;
+        color: #6F6762;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .hf-msb-footer a:hover {
+        color: #B88646;
+      }
+      .hf-msb-footer a i {
+        width: 18px;
+        text-align: center;
+        font-size: 14px;
+        color: #B88646;
+      }
+
+      /* ===== Responsive ===== */
+      @media (max-width: 991px) {
+        .hf-header-inner {
+          flex-wrap: wrap;
+          height: auto;
+          padding: 10px 0;
+          gap: 10px;
+        }
+        .hf-menu-toggle { display: flex; order: 0; }
+        .hf-brand { order: 1; }
+        .hf-actions { order: 2; margin-left: auto; }
+        .hf-search { order: 3; max-width: 100%; flex-basis: 100%; }
+        .hf-action-label { display: none; }
+        .hf-action-item { padding: 4px 6px; }
+        .hf-action-divider { display: none; }
+        /* Show mobile sidebar elements */
+        .hf-mobile-sidebar { display: block; }
+      }
+      @media (max-width: 575px) {
+        .hf-topbar-links { display: none; }
+        .hf-brand img { height: 48px; }
+        .hf-search-input { height: 36px; font-size: 13px; padding: 0 38px 0 14px; }
+        .hf-search-btn { width: 28px; height: 28px; font-size: 12px; }
+        .hf-action-icon { width: 30px; height: 30px; font-size: 13px; }
+        .hf-cart-badge { min-width: 15px; height: 15px; font-size: 8px; top: -2px; right: -4px; }
+      }
+    </style>
+
     <script type="text/javascript">
       /// some script
 
@@ -49,102 +488,178 @@
   </head>
   <body>
     <header class="section-header">
-      <nav class="navbar navbar-dark navbar-expand p-0 bg-dark">
-        <div class="container">
-          <ul class="navbar-nav d-none d-md-flex mr-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Delivery</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Payment</a></li>
-          </ul>
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a href="#" class="nav-link"> Call: +99812345678 </a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-              >
-                English
-              </a>
-              <ul
-                class="dropdown-menu dropdown-menu-right"
-                style="max-width: 100px"
-              >
-                <li><a class="dropdown-item" href="#">Arabic</a></li>
-                <li><a class="dropdown-item" href="#">Russian </a></li>
-              </ul>
-            </li>
-          </ul>
-          <!-- list-inline //  -->
-        </div>
-        <!-- navbar-collapse .// -->
-        <!-- container //  -->
-      </nav>
-      <!-- header-top-light.// -->
 
-      <section class="header-main border-bottom">
+      <!-- ===== Top Bar ===== -->
+      <div class="hf-topbar">
         <div class="container">
-          <div class="row align-items-center">
-            <div class="col-lg-3 col-6">
-              <div class="brand-wrap">
-                <img class="logo" src="/media/images/logos/logo.png" alt="Haatify Logo" style="max-height:130px; width:auto;" />
-              </div>
-              <!-- brand-wrap.// -->
+          <ul class="hf-topbar-links d-none d-md-flex">
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Delivery</a></li>
+            <li><a href="#">Payment</a></li>
+          </ul>
+          <div class="hf-topbar-right">
+            <span class="hf-phone d-none d-sm-inline">
+              <i class="fas fa-phone-alt"></i> +998 12 345 678
+            </span>
+            <div class="dropdown">
+              <button class="hf-lang-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-globe" style="margin-right:4px;"></i> English <i class="fas fa-chevron-down"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><a class="dropdown-item" href="#">Arabic</a></li>
+                <li><a class="dropdown-item" href="#">Russian</a></li>
+              </ul>
             </div>
-            <div class="col-lg-5 col-sm-12">
-              <form action="#" class="search">
-                <div class="input-group w-100">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Search"
-                  />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-              </form>
-              <!-- search-wrap .end// -->
-            </div>
-            <!-- col.// -->
-            <div class="col-lg-4 col-sm-6 col-6">
-              <div class="widgets-wrap float-md-right">
-                <div class="widget-header mr-3">
-                  <a href="{% url 'cart' %}" class="icon icon-sm rounded-circle border cart-header-btn"
-                    ><i class="fa fa-shopping-cart"></i
-                  ></a>
-                  <span class="badge badge-pill badge-danger notify cart-header-count">
-                    {{ cart_count|default:0 }}
-                  </span>
-                </div>
-                <div class="widget-header icontext">
-                  <a href="{% url 'login' %}" class="icon icon-sm rounded-circle border"
-                    ><i class="fa fa-user"></i
-                  ></a>
-                  <div class="text">
-                    <span class="text-muted">Welcome!</span>
-                    <div>
-                      <a href="{% url 'login' %}">Sign in</a> |
-                      <a href="{% url 'register' %}"> Register</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- widgets-wrap.// -->
-            </div>
-            <!-- col.// -->
           </div>
-          <!-- row.// -->
         </div>
-        <!-- container.// -->
+      </div>
+
+      <!-- ===== Main Header ===== -->
+      <section class="hf-header-main">
+        <div class="container">
+          <div class="hf-header-inner">
+
+            <!-- Hamburger (mobile) -->
+            <button class="hf-menu-toggle" id="hfMenuToggle" aria-label="Open menu">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </button>
+
+            <!-- Logo -->
+            <a href="/" class="hf-brand">
+              <img src="/media/images/logos/logo.png" alt="Haatify Logo" />
+            </a>
+
+            <!-- Search Bar -->
+            <form action="#" class="hf-search" method="GET">
+              <input type="text" class="hf-search-input" placeholder="Search for products, brands and more..." name="q" />
+              <button type="submit" class="hf-search-btn">
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
+
+            <!-- Action Widgets -->
+            <div class="hf-actions">
+
+              <!-- Cart -->
+              <a href="{% url 'cart' %}" class="hf-action-item cart-header-btn">
+                <span class="hf-action-icon hf-cart-icon">
+                  <i class="fas fa-shopping-bag"></i>
+                  <span class="hf-cart-badge cart-header-count">{{ cart_count|default:0 }}</span>
+                </span>
+                <span class="hf-action-label d-none d-lg-block">
+                  <span class="label-top">Your Cart</span>
+                  <span class="label-bottom">{{ cart_count|default:0 }} Item{{ cart_count|default:0|pluralize }}</span>
+                </span>
+              </a>
+
+              <span class="hf-action-divider d-none d-lg-block"></span>
+
+              <!-- Account -->
+              <a href="{% url 'login' %}" class="hf-action-item">
+                <span class="hf-action-icon hf-user-icon">
+                  <i class="fas fa-user"></i>
+                </span>
+                <span class="hf-action-label d-none d-lg-block">
+                  <span class="label-top">Welcome!</span>
+                  <span class="label-bottom">Sign in / Register</span>
+                </span>
+              </a>
+
+            </div>
+
+          </div>
+        </div>
       </section>
-      <!-- header-main .// -->
+
     </header>
 
+    <!-- ===== Mobile Sidebar Panel ===== -->
+    <div class="hf-sidebar-overlay" id="hfSidebarOverlay"></div>
+    <div class="hf-mobile-sidebar" id="hfMobileSidebar">
+      <div class="hf-msb-header">
+        <a href="/" class="msb-logo">
+          <img src="/media/images/logos/logo.png" alt="Haatify" />
+        </a>
+        <button class="hf-msb-close" id="hfSidebarClose" aria-label="Close menu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="hf-msb-body" id="hfMobileSidebarBody">
+        <!-- Sidebar content will be cloned here via JS -->
+      </div>
+      <div class="hf-msb-footer">
+        <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+        <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Create Account</a>
+      </div>
+    </div>
+
     {% block start %} {% endblock %}
+
+    <script>
+    (function(){
+      var toggle = document.getElementById('hfMenuToggle');
+      var sidebar = document.getElementById('hfMobileSidebar');
+      var overlay = document.getElementById('hfSidebarOverlay');
+      var closeBtn = document.getElementById('hfSidebarClose');
+      var body = document.getElementById('hfMobileSidebarBody');
+
+      // Clone desktop sidebar nav into mobile panel on first open
+      var cloned = false;
+      function cloneSidebar() {
+        if (cloned) return;
+        var desktopNav = document.querySelector('aside.col-md-3 .sidebar-nav');
+        if (desktopNav) {
+          var clone = desktopNav.cloneNode(true);
+          // Re-init Bootstrap collapse on cloned elements
+          $(clone).find('.collapse').addClass('show');
+          $(clone).find('.sidebar-heading').removeClass('collapsed');
+          body.appendChild(clone);
+        }
+        cloned = true;
+      }
+
+      function openSidebar() {
+        cloneSidebar();
+        overlay.style.display = 'block';
+        sidebar.style.display = 'block';
+        // Force reflow then animate
+        sidebar.offsetHeight;
+        overlay.classList.add('is-visible');
+        sidebar.classList.add('is-open');
+        toggle.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        overlay.classList.remove('is-visible');
+        sidebar.classList.remove('is-open');
+        toggle.classList.remove('is-open');
+        document.body.style.overflow = '';
+        setTimeout(function(){
+          overlay.style.display = 'none';
+        }, 320);
+      }
+
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (sidebar.classList.contains('is-open')) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      });
+      overlay.addEventListener('click', closeSidebar);
+      closeBtn.addEventListener('click', closeSidebar);
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('is-open')) {
+          closeSidebar();
+        }
+      });
+    })();
+    </script>
   </body>
 </html>
