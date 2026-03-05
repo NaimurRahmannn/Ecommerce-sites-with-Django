@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
 from base.models import Basemodel
-import random
 
 CATEGORY_TYPE_CHOICES = (
     ('MEN', 'Men'),
@@ -50,7 +49,13 @@ class Product(Basemodel):
     color_variant = models.ManyToManyField(ColorVariant , blank=True)
     size_variant = models.ManyToManyField(SizeVariant , blank=True)
     def save(self , *args , **kwargs):
-        self.slug = slugify(self.product_name)
+        base_slug = slugify(self.product_name)
+        slug = base_slug
+        n = 1
+        while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            slug = f"{base_slug}-{n}"
+            n += 1
+        self.slug = slug
         super(Product ,self).save(*args , **kwargs)
     def __str__(self) -> str:
         return self.product_name
@@ -73,6 +78,14 @@ PAYMENT_METHOD_CHOICES = (
     ('cod', 'Cash on Delivery'),
 )
 
+ORDER_STATUS_CHOICES = (
+    ('pending', 'Pending'),
+    ('processing', 'Processing'),
+    ('shipped', 'Shipped'),
+    ('delivered', 'Delivered'),
+    ('cancelled', 'Cancelled'),
+)
+
 class Order(Basemodel):
     order_number = models.PositiveIntegerField(unique=True, editable=False)
     email = models.EmailField()
@@ -84,6 +97,7 @@ class Order(Basemodel):
     state = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=20)
     payment_method = models.CharField(max_length=10, choices=PAYMENT_METHOD_CHOICES)
+    order_status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')
     transaction_id = models.CharField(max_length=100, blank=True, default='')
     reference = models.CharField(max_length=100, blank=True, default='')
     subtotal = models.DecimalField(max_digits=12, decimal_places=2)

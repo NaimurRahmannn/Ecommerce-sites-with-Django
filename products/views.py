@@ -34,11 +34,8 @@ def search(request):
 
 
 def get_product(request, slug):
-    try:
-        product = Product.objects.get(slug=slug)
-        return render(request, "product/product.html", context={"product": product})
-    except Exception as e:
-        print(e)
+    product = get_object_or_404(Product, slug=slug)
+    return render(request, "product/product.html", context={"product": product})
 
 
 def add_to_cart(request, slug):
@@ -215,8 +212,8 @@ def buy_now(request, slug):
             }
         ],
         "subtotal": subtotal,
-        "shipping": 0,
-        "total": subtotal,
+        "shipping": 100,
+        "total": subtotal + 100,
         "back_url": "get_product",
         "back_url_kwargs": {"slug": product.slug},
     }
@@ -251,8 +248,8 @@ def checkout(request):
     context = {
         "checkout_items": checkout_items,
         "subtotal": subtotal,
-        "shipping": 0,
-        "total": subtotal,
+        "shipping": 100,
+        "total": subtotal + 100,
         "back_url": "cart",
     }
     return render(request, "product/checkout.html", context)
@@ -306,6 +303,11 @@ def place_order(request):
     state = request.POST.get("state", "").strip()
     zip_code = request.POST.get("zip_code", "").strip()
     payment_method = request.POST.get("payment_method", "cod").strip()
+
+    # Validate payment method
+    valid_methods = ['card', 'bkash', 'nagad', 'cod']
+    if payment_method not in valid_methods:
+        payment_method = 'cod'
 
     # Validate required fields
     required = [email, phone, first_name, last_name, street_address, city, state, zip_code]
@@ -363,7 +365,7 @@ def place_order(request):
         messages.error(request, "No valid items to order.")
         return redirect("cart")
 
-    shipping = 0
+    shipping = 100
     total = subtotal + shipping
 
     # Create order
@@ -403,6 +405,11 @@ def place_order(request):
 
 def invoice(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
+    # Only allow the person who placed the order (or staff) to view the invoice
+    if not request.user.is_staff and order.email != request.POST.get('email', request.GET.get('email', '')):
+        if request.user.is_authenticated and order.email != request.user.email:
+            from django.http import HttpResponseForbidden
+            return HttpResponseForbidden("You do not have permission to view this invoice.")
     context = {
         "order": order,
         "order_items": order.items.all(),
