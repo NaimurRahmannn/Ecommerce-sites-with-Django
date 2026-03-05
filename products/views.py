@@ -247,9 +247,15 @@ def checkout(request):
 
 def category_products(request, slug):
     category = get_object_or_404(Category, slug=slug)
+    sort = request.GET.get('sort', 'default')
     products = Product.objects.filter(category=category)
+    if sort == 'price_low':
+        products = products.order_by('price')
+    elif sort == 'price_high':
+        products = products.order_by('-price')
     context = {
         "products": products,
         "current_category": category,
+        "current_sort": sort,
     }
     return render(request, "home/index.html", context)

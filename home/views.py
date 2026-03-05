@@ -4,8 +4,14 @@ from products.models import Product
 
 
 def index(request):
-    context = {'products' : Product.objects.all()}
-    return render(request , 'home/index.html' , context)
+    sort = request.GET.get('sort', 'default')
+    products = Product.objects.all()
+    if sort == 'price_low':
+        products = products.order_by('price')
+    elif sort == 'price_high':
+        products = products.order_by('-price')
+    context = {'products': products, 'current_sort': sort}
+    return render(request, 'home/index.html', context)
 
 
 def contact(request):
