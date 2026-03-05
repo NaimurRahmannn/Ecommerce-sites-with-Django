@@ -1,0 +1,218 @@
+{% extends "base/base.html" %} {% block start %}
+
+<style>
+  .inv-page { background: #f5f5f5; min-height: 70vh; padding: 40px 0; }
+  .inv-wrap { max-width: 780px; margin: 0 auto; }
+
+  .inv-sheet {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 48px 44px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #111;
+    line-height: 1.5;
+  }
+
+  .inv-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; border-bottom: 2px solid #111; padding-bottom: 20px; }
+  .inv-brand h1 { font-size: 28px; font-weight: 800; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+  .inv-brand p { margin: 4px 0 0; font-size: 12px; color: #666; }
+  .inv-meta { text-align: right; }
+  .inv-meta .inv-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .inv-meta .inv-val { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .inv-meta .inv-val-big { font-size: 22px; font-weight: 800; }
+
+  .inv-info { display: flex; gap: 40px; margin-bottom: 30px; }
+  .inv-info-col { flex: 1; }
+  .inv-info-col h5 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; font-weight: 700; margin: 0 0 8px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+  .inv-info-col p { margin: 0 0 2px; font-size: 13px; color: #333; }
+  .inv-info-col p strong { color: #111; }
+
+  .inv-tbl { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  .inv-tbl th { background: #111; color: #fff; padding: 10px 12px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; text-align: left; }
+  .inv-tbl th:nth-child(2), .inv-tbl th:nth-child(3), .inv-tbl th:last-child { text-align: right; }
+  .inv-tbl td { padding: 12px 12px; font-size: 13px; border-bottom: 1px solid #eee; color: #333; }
+  .inv-tbl td:nth-child(2), .inv-tbl td:nth-child(3), .inv-tbl td:last-child { text-align: right; }
+  .inv-tbl td:last-child { font-weight: 700; color: #111; }
+  .inv-tbl .td-name { font-weight: 600; color: #111; }
+  .inv-tbl .td-size { font-size: 11px; color: #999; }
+
+  .inv-totals { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+  .inv-totals-box { width: 260px; }
+  .inv-totals-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; }
+  .inv-totals-row .lbl { color: #666; }
+  .inv-totals-row .val { font-weight: 600; color: #333; }
+  .inv-totals-line { border-top: 2px solid #111; margin: 6px 0; }
+  .inv-totals-grand { display: flex; justify-content: space-between; padding: 8px 0 0; }
+  .inv-totals-grand .lbl { font-size: 15px; font-weight: 800; color: #111; }
+  .inv-totals-grand .val { font-size: 18px; font-weight: 800; color: #111; }
+
+  .inv-foot { text-align: center; font-size: 11px; color: #aaa; margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd; }
+
+  .inv-actions { text-align: center; margin-top: 24px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .inv-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s; text-decoration: none; border: none; }
+  .inv-btn-primary { background: #111; color: #fff; }
+  .inv-btn-primary:hover { background: #333; color: #fff; text-decoration: none; }
+  .inv-btn-outline { background: #fff; color: #111; border: 2px solid #111; }
+  .inv-btn-outline:hover { background: #f5f5f5; text-decoration: none; color: #111; }
+
+  .inv-alert { background: #f0faf0; border: 1px solid #b5e2b5; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; max-width: 780px; margin-left: auto; margin-right: auto; }
+  .inv-alert-icon { font-size: 28px; color: #3a3; flex-shrink: 0; }
+  .inv-alert-text { font-size: 15px; font-weight: 600; color: #333; }
+  .inv-alert-text span { display: block; font-size: 13px; font-weight: 400; color: #666; margin-top: 2px; }
+</style>
+
+<section class="inv-page">
+  <div class="container">
+
+    <div class="inv-alert">
+      <div class="inv-alert-icon">&#10003;</div>
+      <div class="inv-alert-text">
+        Order placed successfully!
+        <span>Your order number is <strong>#{{ order.order_number }}</strong>. Save this page or download the invoice for your records.</span>
+      </div>
+    </div>
+
+    <div class="inv-wrap">
+
+      <div class="inv-sheet" id="invoiceSheet">
+
+        <div class="inv-top">
+          <div class="inv-brand">
+            <h1>Haatify</h1>
+            <p>Invoice</p>
+          </div>
+          <div class="inv-meta">
+            <div class="inv-label">Order Number</div>
+            <div class="inv-val inv-val-big">#{{ order.order_number }}</div>
+            <div class="inv-label">Date</div>
+            <div class="inv-val">{{ order.created_at|date:"F d, Y" }}</div>
+          </div>
+        </div>
+
+        <div class="inv-info">
+          <div class="inv-info-col">
+            <h5>Ship To</h5>
+            <p><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
+            <p>{{ order.street_address }}</p>
+            <p>{{ order.city }}, {{ order.state }} {{ order.zip_code }}</p>
+            <p style="margin-top:6px;">{{ order.phone }}</p>
+            <p>{{ order.email }}</p>
+          </div>
+          <div class="inv-info-col">
+            <h5>Payment Information</h5>
+            <p><strong>Method:</strong>
+              {% if order.payment_method == 'card' %}Card Payment
+              {% elif order.payment_method == 'bkash' %}bKash
+              {% elif order.payment_method == 'nagad' %}Nagad
+              {% else %}Cash on Delivery
+              {% endif %}
+            </p>
+            {% if order.transaction_id %}
+            <p><strong>Transaction ID:</strong> {{ order.transaction_id }}</p>
+            {% endif %}
+            {% if order.reference %}
+            <p><strong>Reference:</strong> {{ order.reference }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <table class="inv-tbl">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Unit Price</th>
+              <th>Qty</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order_items %}
+            <tr>
+              <td>
+                <div class="td-name">{{ item.product_name }}</div>
+                {% if item.size %}<div class="td-size">Size: {{ item.size }}</div>{% endif %}
+              </td>
+              <td>{{ item.price|floatformat:2 }} BDT</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.line_total|floatformat:2 }} BDT</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="inv-totals">
+          <div class="inv-totals-box">
+            <div class="inv-totals-row">
+              <span class="lbl">Subtotal</span>
+              <span class="val">{{ order.subtotal|floatformat:2 }} BDT</span>
+            </div>
+            <div class="inv-totals-row">
+              <span class="lbl">Shipping</span>
+              <span class="val">{{ order.shipping|floatformat:2 }} BDT</span>
+            </div>
+            <div class="inv-totals-line"></div>
+            <div class="inv-totals-grand">
+              <span class="lbl">Total</span>
+              <span class="val">{{ order.total|floatformat:2 }} BDT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inv-foot">
+          Thank you for shopping with Haatify.
+        </div>
+
+      </div>
+
+      <div class="inv-actions">
+        <button class="inv-btn inv-btn-primary" onclick="downloadInvoice()">
+          Download Invoice (PDF)
+        </button>
+        <a href="{% url 'index' %}" class="inv-btn inv-btn-outline">
+          Continue Shopping
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+function downloadInvoice() {
+  var opt = {
+    margin: [0.3, 0.3, 0.3, 0.3],
+    filename: 'Invoice_{{ order.order_number }}.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      scrollX: 0,
+      scrollY: 0
+    },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  function run() {
+    var sheet = document.getElementById('invoiceSheet');
+    if (!sheet) {
+      alert('Invoice content not found.');
+      return;
+    }
+
+    html2pdf().set(opt).from(sheet).save();
+  }
+
+  if (typeof html2pdf !== 'undefined') {
+    run();
+  } else {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.onload = run;
+    s.onerror = function() { alert('Failed to load PDF library. Check your internet connection.'); };
+    document.head.appendChild(s);
+  }
+}
+</script>
+
+{% endblock %}

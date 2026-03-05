@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
-from products.models import Product, Category
+from products.models import Product, Category, Order, OrderItem
 
 
 def _get_cart(request):
@@ -259,3 +259,121 @@ def category_products(request, slug):
         "current_sort": sort,
     }
     return render(request, "home/index.html", context)
+
+
+def place_order(request):
+    if request.method != "POST":
+        return redirect("cart")
+
+    # Collect form data
+    email = request.POST.get("email", "").strip()
+    phone = request.POST.get("phone", "").strip()
+    first_name = request.POST.get("first_name", "").strip()
+    last_name = request.POST.get("last_name", "").strip()
+    street_address = request.POST.get("street_address", "").strip()
+    city = request.POST.get("city", "").strip()
+    state = request.POST.get("state", "").strip()
+    zip_code = request.POST.get("zip_code", "").strip()
+    payment_method = request.POST.get("payment_method", "cod").strip()
+
+    # Validate required fields
+    required = [email, phone, first_name, last_name, street_address, city, state, zip_code]
+    if not all(required):
+        messages.error(request, "Please fill in all required fields.")
+        return redirect(request.META.get("HTTP_REFERER", "cart"))
+
+    # Payment-specific fields
+    transaction_id = ""
+    reference = ""
+    if payment_method == "bkash":
+        transaction_id = request.POST.get("bkash_trx_id", "").strip()
+        reference = request.POST.get("bkash_reference", "").strip()
+        if not transaction_id:
+            messages.error(request, "bKash Transaction ID is required.")
+            return redirect(request.META.get("HTTP_REFERER", "cart"))
+    elif payment_method == "nagad":
+        transaction_id = request.POST.get("nagad_trx_id", "").strip()
+        reference = request.POST.get("nagad_reference", "").strip()
+        if not transaction_id:
+            messages.error(request, "Nagad Transaction ID is required.")
+            return redirect(request.META.get("HTTP_REFERER", "cart"))
+
+    # Build order items from hidden fields
+    product_ids = request.POST.getlist("product_ids")
+    quantities = request.POST.getlist("quantities")
+    sizes = request.POST.getlist("sizes")
+
+    if not product_ids:
+        messages.error(request, "No items to order.")
+        return redirect("cart")
+
+    subtotal = 0
+    items_data = []
+    for pid, qty_raw, size in zip(product_ids, quantities, sizes):
+        product = Product.objects.filter(pk=pid).first()
+        if not product:
+            continue
+        try:
+            quantity = int(qty_raw)
+        except (ValueError, TypeError):
+            quantity = 1
+        if quantity < 1:
+            quantity = 1
+        line_total = product.price * quantity
+        subtotal += line_total
+        items_data.append({
+            "product": product,
+            "quantity": quantity,
+            "size": size,
+            "line_total": line_total,
+        })
+
+    if not items_data:
+        messages.error(request, "No valid items to order.")
+        return redirect("cart")
+
+    shipping = 0
+    total = subtotal + shipping
+
+    # Create order
+    order = Order.objects.create(
+        email=email,
+        phone=phone,
+        first_name=first_name,
+        last_name=last_name,
+        street_address=street_address,
+        city=city,
+        state=state,
+        zip_code=zip_code,
+        payment_method=payment_method,
+        transaction_id=transaction_id,
+        reference=reference,
+        subtotal=subtotal,
+        shipping=shipping,
+        total=total,
+    )
+
+    for item in items_data:
+        OrderItem.objects.create(
+            order=order,
+            product=item["product"],
+            product_name=item["product"].product_name,
+            size=item["size"],
+            quantity=item["quantity"],
+            price=item["product"].price,
+            line_total=item["line_total"],
+        )
+
+    # Clear cart
+    _save_cart(request, [])
+
+    return redirect("invoice", order_number=order.order_number)
+
+
+def invoice(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number)
+    context = {
+        "order": order,
+        "order_items": order.items.all(),
+    }
+    return render(request, "product/invoice.html", context)

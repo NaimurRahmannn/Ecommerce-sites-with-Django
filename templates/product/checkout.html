@@ -353,6 +353,159 @@
     border-color: #B88646;
     color: #B88646;
   }
+
+  /* ===== Payment Method Tabs ===== */
+  .payment-method-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .payment-method-tab {
+    flex: 1;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+  }
+  .payment-method-tab:hover {
+    border-color: #d4a55a;
+    background: #fdf8f1;
+  }
+  .payment-method-tab.active {
+    border-color: #B88646;
+    background: linear-gradient(135deg, #fdf8f1, #fff7eb);
+    box-shadow: 0 2px 12px rgba(184,134,70,0.15);
+  }
+  .payment-method-tab input[type="radio"] {
+    display: none;
+  }
+  .payment-method-tab .tab-icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+    color: #999;
+    transition: color 0.25s;
+  }
+  .payment-method-tab.active .tab-icon {
+    color: #B88646;
+  }
+  .payment-method-tab .tab-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+    transition: color 0.25s;
+  }
+  .payment-method-tab.active .tab-label {
+    color: #B88646;
+  }
+
+  /* Payment panels */
+  .payment-panel {
+    display: none;
+    animation: fadeInPanel 0.3s ease;
+  }
+  .payment-panel.active {
+    display: block;
+  }
+  @keyframes fadeInPanel {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile money steps */
+  .mobile-payment-steps {
+    background: #fdf8f1;
+    border: 1.5px solid #e8dcc8;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .mobile-payment-steps .steps-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #B88646;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mobile-payment-steps ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .mobile-payment-steps ol li {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+    font-weight: 500;
+  }
+  .mobile-payment-steps ol li strong {
+    color: #B88646;
+  }
+  .mobile-payment-steps .steps-notes {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #e0d3bd;
+  }
+  .mobile-payment-steps .steps-notes p {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .mobile-payment-steps .steps-notes p i {
+    color: #B88646;
+    margin-top: 2px;
+    font-size: 11px;
+  }
+  .trx-id-input {
+    border: 2px solid #e8dcc8 !important;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #333;
+  }
+  .trx-id-input:focus {
+    border-color: #B88646 !important;
+    box-shadow: 0 0 0 3px rgba(184,134,70,0.12) !important;
+  }
+
+  /* COD note */
+  .cod-note {
+    background: #f0faf0;
+    border: 1.5px solid #c3e6c3;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .cod-note i {
+    font-size: 32px;
+    color: #5cb85c;
+    margin-bottom: 10px;
+  }
+  .cod-note h6 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .cod-note p {
+    font-size: 13px;
+    color: #777;
+    margin: 0;
+  }
 </style>
 
 <section class="section-content padding-y premium-checkout-section">
@@ -377,6 +530,14 @@
       </div>
     </div>
 
+    <form id="checkoutForm" method="POST" action="{% url 'place_order' %}" novalidate>
+    {% csrf_token %}
+    {% for item in checkout_items %}
+    <input type="hidden" name="product_ids" value="{{ item.product.uid }}" />
+    <input type="hidden" name="quantities" value="{{ item.quantity }}" />
+    <input type="hidden" name="sizes" value="{{ item.size }}" />
+    {% endfor %}
+
     <div class="row">
       <!-- Left column: Forms -->
       <div class="col-lg-8 mb-4">
@@ -389,12 +550,12 @@
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label>Email Address</label>
-                <input type="email" class="form-control" placeholder="you@example.com" />
+                <label>Email Address <span class="text-danger">*</span></label>
+                <input type="email" name="email" class="form-control" placeholder="you@example.com" required />
               </div>
               <div class="form-group col-md-6">
-                <label>Phone Number</label>
-                <input type="text" class="form-control" placeholder="+1 555 000 0000" />
+                <label>Phone Number <span class="text-danger">*</span></label>
+                <input type="text" name="phone" class="form-control" placeholder="+880 1XXX XXXXXX" required />
               </div>
             </div>
           </div>
@@ -408,30 +569,30 @@
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label>First Name</label>
-                <input type="text" class="form-control" placeholder="John" />
+                <label>First Name <span class="text-danger">*</span></label>
+                <input type="text" name="first_name" class="form-control" placeholder="John" required />
               </div>
               <div class="form-group col-md-6">
-                <label>Last Name</label>
-                <input type="text" class="form-control" placeholder="Doe" />
+                <label>Last Name <span class="text-danger">*</span></label>
+                <input type="text" name="last_name" class="form-control" placeholder="Doe" required />
               </div>
             </div>
             <div class="form-group">
-              <label>Street Address</label>
-              <input type="text" class="form-control" placeholder="123 Main St, Apt 4B" />
+              <label>Street Address <span class="text-danger">*</span></label>
+              <input type="text" name="street_address" class="form-control" placeholder="123 Main St, Apt 4B" required />
             </div>
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label>City</label>
-                <input type="text" class="form-control" placeholder="New York" />
+                <label>City <span class="text-danger">*</span></label>
+                <input type="text" name="city" class="form-control" placeholder="New York" required />
               </div>
               <div class="form-group col-md-4">
-                <label>State</label>
-                <input type="text" class="form-control" placeholder="NY" />
+                <label>State <span class="text-danger">*</span></label>
+                <input type="text" name="state" class="form-control" placeholder="NY" required />
               </div>
               <div class="form-group col-md-4">
-                <label>ZIP Code</label>
-                <input type="text" class="form-control" placeholder="10001" />
+                <label>ZIP Code <span class="text-danger">*</span></label>
+                <input type="text" name="zip_code" class="form-control" placeholder="10001" required />
               </div>
             </div>
           </div>
@@ -443,30 +604,126 @@
             <div class="checkout-card-title">
               <i class="fas fa-lock icon-payment"></i> Payment Details
             </div>
-            <div class="form-group">
-              <label>Card Number</label>
-              <input type="text" class="form-control" placeholder="1234  5678  9012  3456" />
+
+            <!-- Payment method tabs -->
+            <div class="payment-method-tabs">
+              <label class="payment-method-tab active" data-target="panel-card" onclick="switchPayment(this)">
+                <input type="radio" name="payment_method" value="card" checked />
+                <span class="tab-icon"><i class="fas fa-credit-card"></i></span>
+                <span class="tab-label">Card</span>
+              </label>
+              <label class="payment-method-tab" data-target="panel-bkash" onclick="switchPayment(this)">
+                <input type="radio" name="payment_method" value="bkash" />
+                <span class="tab-icon"><i class="fas fa-mobile-alt"></i></span>
+                <span class="tab-label">bKash</span>
+              </label>
+              <label class="payment-method-tab" data-target="panel-nagad" onclick="switchPayment(this)">
+                <input type="radio" name="payment_method" value="nagad" />
+                <span class="tab-icon"><i class="fas fa-mobile-alt"></i></span>
+                <span class="tab-label">Nagad</span>
+              </label>
+              <label class="payment-method-tab" data-target="panel-cod" onclick="switchPayment(this)">
+                <input type="radio" name="payment_method" value="cod" />
+                <span class="tab-icon"><i class="fas fa-hand-holding-usd"></i></span>
+                <span class="tab-label">COD</span>
+              </label>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <label>Expiry Date</label>
-                <input type="text" class="form-control" placeholder="MM / YY" />
+
+            <!-- Card Panel -->
+            <div id="panel-card" class="payment-panel active">
+              <div class="form-group">
+                <label>Card Number <span class="text-danger">*</span></label>
+                <input type="text" name="card_number" class="form-control" placeholder="1234  5678  9012  3456" />
               </div>
-              <div class="form-group col-md-4">
-                <label>CVV</label>
-                <input type="password" class="form-control" placeholder="&#9679;&#9679;&#9679;" />
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label>Expiry Date <span class="text-danger">*</span></label>
+                  <input type="text" name="card_expiry" class="form-control" placeholder="MM / YY" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label>CVV <span class="text-danger">*</span></label>
+                  <input type="password" name="card_cvv" class="form-control" placeholder="&#9679;&#9679;&#9679;" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Name on Card <span class="text-danger">*</span></label>
+                  <input type="text" name="card_name" class="form-control" placeholder="John Doe" />
+                </div>
               </div>
-              <div class="form-group col-md-4">
-                <label>Name on Card</label>
-                <input type="text" class="form-control" placeholder="John Doe" />
+              <div class="payment-icons">
+                <span class="pay-icon"><i class="fab fa-cc-visa"></i></span>
+                <span class="pay-icon"><i class="fab fa-cc-mastercard"></i></span>
+                <span class="pay-icon"><i class="fab fa-cc-amex"></i></span>
+                <span class="pay-icon"><i class="fab fa-cc-paypal"></i></span>
               </div>
             </div>
-            <div class="payment-icons">
-              <span class="pay-icon"><i class="fab fa-cc-visa"></i></span>
-              <span class="pay-icon"><i class="fab fa-cc-mastercard"></i></span>
-              <span class="pay-icon"><i class="fab fa-cc-amex"></i></span>
-              <span class="pay-icon"><i class="fab fa-cc-paypal"></i></span>
+
+            <!-- bKash Panel -->
+            <div id="panel-bkash" class="payment-panel">
+              <div class="mobile-payment-steps">
+                <div class="steps-title">
+                  <i class="fas fa-info-circle"></i> How to pay with bKash
+                </div>
+                <ol>
+                  <li>Choose the <strong>Send Money</strong> option</li>
+                  <li>Enter bKash account no - <strong>01847425540</strong></li>
+                  <li>Enter the <strong>amount</strong></li>
+                  <li>Enter your reference: <strong>"Order Number"</strong> - Ex: 6291</li>
+                  <li>Enter your <strong>PIN</strong></li>
+                </ol>
+                <div style="text-align:center; margin: 10px 0 0; font-weight:700; color:#B88646;">— Payment Successful —</div>
+                <div class="steps-notes">
+                  <p><i class="fas fa-asterisk"></i> Click on <strong>Pay Now</strong> and go to the next page to collect your order number</p>
+                  <p><i class="fas fa-asterisk"></i> Payment won't require any additional fees or charges</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>bKash Transaction ID</label>
+                <input type="text" name="bkash_trx_id" class="form-control trx-id-input" placeholder="Enter your bKash Transaction ID" />
+              </div>
+              <div class="form-group">
+                <label>Reference</label>
+                <input type="text" name="bkash_reference" class="form-control trx-id-input" placeholder="Enter your reference (e.g. Order Number)" />
+              </div>
             </div>
+
+            <!-- Nagad Panel -->
+            <div id="panel-nagad" class="payment-panel">
+              <div class="mobile-payment-steps">
+                <div class="steps-title">
+                  <i class="fas fa-info-circle"></i> How to pay with Nagad
+                </div>
+                <ol>
+                  <li>Choose the <strong>Send Money</strong> option</li>
+                  <li>Enter Nagad account no - <strong>01847425540</strong></li>
+                  <li>Enter the <strong>amount</strong></li>
+                  <li>Enter your reference: <strong>"Order Number"</strong> - Ex: 6291</li>
+                  <li>Enter your <strong>PIN</strong></li>
+                </ol>
+                <div style="text-align:center; margin: 10px 0 0; font-weight:700; color:#B88646;">— Payment Successful —</div>
+                <div class="steps-notes">
+                  <p><i class="fas fa-asterisk"></i> Click on <strong>Pay Now</strong> and go to the next page to collect your order number</p>
+                  <p><i class="fas fa-asterisk"></i> Payment won't require any additional fees or charges</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Nagad Transaction ID</label>
+                <input type="text" name="nagad_trx_id" class="form-control trx-id-input" placeholder="Enter your Nagad Transaction ID" />
+              </div>
+              <div class="form-group">
+                <label>Reference</label>
+                <input type="text" name="nagad_reference" class="form-control trx-id-input" placeholder="Enter your reference (e.g. Order Number)" />
+              </div>
+            </div>
+
+            <!-- COD Panel -->
+            <div id="panel-cod" class="payment-panel">
+              <div class="cod-note">
+                <i class="fas fa-box-open"></i>
+                <h6>Cash on Delivery</h6>
+                <p>Pay with cash when your order is delivered to your doorstep.</p>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -515,7 +772,7 @@
             <span class="total-value">৳{{ total|floatformat:2 }}</span>
           </div>
 
-          <button class="btn btn-place-order">
+          <button type="submit" class="btn btn-place-order" id="placeOrderBtn">
             <i class="fas fa-lock" style="margin-right:6px; font-size:14px;"></i>
             Place Order
           </button>
@@ -539,7 +796,96 @@
       </div>
 
     </div>
+    </form>
   </div>
 </section>
+
+<script>
+function switchPayment(el) {
+  document.querySelectorAll('.payment-method-tab').forEach(function(tab) {
+    tab.classList.remove('active');
+  });
+  el.classList.add('active');
+  el.querySelector('input[type="radio"]').checked = true;
+
+  document.querySelectorAll('.payment-panel').forEach(function(panel) {
+    panel.classList.remove('active');
+  });
+  var target = document.getElementById(el.getAttribute('data-target'));
+  if (target) {
+    target.classList.add('active');
+  }
+}
+
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+  var errors = [];
+
+  // Contact & Shipping required fields
+  var requiredFields = [
+    {name: 'email', label: 'Email Address'},
+    {name: 'phone', label: 'Phone Number'},
+    {name: 'first_name', label: 'First Name'},
+    {name: 'last_name', label: 'Last Name'},
+    {name: 'street_address', label: 'Street Address'},
+    {name: 'city', label: 'City'},
+    {name: 'state', label: 'State'},
+    {name: 'zip_code', label: 'ZIP Code'}
+  ];
+
+  // Clear previous highlights
+  document.querySelectorAll('.form-control.is-invalid').forEach(function(el) {
+    el.classList.remove('is-invalid');
+  });
+
+  requiredFields.forEach(function(f) {
+    var input = document.querySelector('[name="' + f.name + '"]');
+    if (!input || !input.value.trim()) {
+      errors.push(f.label + ' is required');
+      if (input) input.classList.add('is-invalid');
+    }
+  });
+
+  // Payment-specific validation
+  var method = document.querySelector('input[name="payment_method"]:checked').value;
+
+  if (method === 'card') {
+    var cardFields = [
+      {name: 'card_number', label: 'Card Number'},
+      {name: 'card_expiry', label: 'Expiry Date'},
+      {name: 'card_cvv', label: 'CVV'},
+      {name: 'card_name', label: 'Name on Card'}
+    ];
+    cardFields.forEach(function(f) {
+      var input = document.querySelector('[name="' + f.name + '"]');
+      if (!input || !input.value.trim()) {
+        errors.push(f.label + ' is required');
+        if (input) input.classList.add('is-invalid');
+      }
+    });
+  } else if (method === 'bkash') {
+    var trx = document.querySelector('[name="bkash_trx_id"]');
+    if (!trx || !trx.value.trim()) {
+      errors.push('bKash Transaction ID is required');
+      if (trx) trx.classList.add('is-invalid');
+    }
+  } else if (method === 'nagad') {
+    var trx = document.querySelector('[name="nagad_trx_id"]');
+    if (!trx || !trx.value.trim()) {
+      errors.push('Nagad Transaction ID is required');
+      if (trx) trx.classList.add('is-invalid');
+    }
+  }
+
+  if (errors.length > 0) {
+    e.preventDefault();
+    var firstInvalid = document.querySelector('.is-invalid');
+    if (firstInvalid) {
+      firstInvalid.scrollIntoView({behavior: 'smooth', block: 'center'});
+      firstInvalid.focus();
+    }
+    alert('Please fill in all required fields:\n\n' + errors.join('\n'));
+  }
+});
+</script>
 
 {% endblock %}
