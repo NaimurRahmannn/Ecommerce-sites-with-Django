@@ -299,7 +299,7 @@
               <div class="card-info">
                 <div class="product-category">{{ product.category.categroy_name }}</div>
                 <a href="{% url 'get_product' product.slug %}" class="product-name">{{product.product_name}}</a>
-                <div class="product-price">${{ product.price|floatformat:2 }}</div>
+                <div class="product-price">৳{{ product.price|floatformat:2 }}</div>
               </div>
             </div>
           </div>

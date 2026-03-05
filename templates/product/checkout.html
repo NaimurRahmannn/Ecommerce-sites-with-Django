@@ -493,7 +493,7 @@
                 <span>Qty: {{ item.quantity }}</span>
               </div>
             </div>
-            <div class="checkout-item-price">${{ item.line_total|floatformat:2 }}</div>
+            <div class="checkout-item-price">৳{{ item.line_total|floatformat:2 }}</div>
           </div>
           {% endfor %}
 
@@ -501,18 +501,18 @@
 
           <div class="checkout-summary-row">
             <span class="label">Subtotal</span>
-            <span class="value">${{ subtotal|floatformat:2 }}</span>
+            <span class="value">৳{{ subtotal|floatformat:2 }}</span>
           </div>
           <div class="checkout-summary-row">
             <span class="label">Shipping</span>
-            <span class="value" style="color:#00b517;">${{ shipping|floatformat:2 }}</span>
+            <span class="value" style="color:#00b517;">৳{{ shipping|floatformat:2 }}</span>
           </div>
 
           <hr class="checkout-summary-divider" />
 
           <div class="checkout-summary-total">
             <span class="total-label">Total</span>
-            <span class="total-value">${{ total|floatformat:2 }}</span>
+            <span class="total-value">৳{{ total|floatformat:2 }}</span>
           </div>
 
           <button class="btn btn-place-order">

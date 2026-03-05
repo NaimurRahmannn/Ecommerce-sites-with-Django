@@ -382,9 +382,9 @@
                         class="cart-price-main cart-line-total"
                         data-product-id="{{ item.product.pk }}"
                         data-size="{{ item.size }}"
-                        >${{ item.line_total|floatformat:2 }}</var
+                        >৳{{ item.line_total|floatformat:2 }}</var
                       >
-                      <div class="cart-price-each">${{ item.product.price|floatformat:2 }} each</div>
+                      <div class="cart-price-each">৳{{ item.product.price|floatformat:2 }} each</div>
                     </div>
                   </td>
                   <td class="text-center">
@@ -410,7 +410,7 @@
           <h5><i class="fas fa-receipt" style="color:#B88646; margin-right:8px;"></i>Order Summary</h5>
           <div class="summary-row">
             <span class="summary-label">Subtotal</span>
-            <span class="summary-value">$<span id="cart-subtotal">{{ subtotal|floatformat:2 }}</span></span>
+            <span class="summary-value">৳<span id="cart-subtotal">{{ subtotal|floatformat:2 }}</span></span>
           </div>
           <div class="summary-row">
             <span class="summary-label">Shipping</span>
@@ -418,7 +418,7 @@
           </div>
           <div class="summary-row border-top-gold">
             <span class="summary-total-label">Total</span>
-            <span class="summary-total-value">$<span id="cart-total">{{ total|floatformat:2 }}</span></span>
+            <span class="summary-total-value">৳<span id="cart-total">{{ total|floatformat:2 }}</span></span>
           </div>
           <a href="{% url 'checkout' %}" class="btn checkout-action-btn">
             <i class="fas fa-lock" style="margin-right:6px; font-size:14px;"></i>
@@ -490,7 +490,7 @@
       size +
       '"]';
     var el = document.querySelector(selector);
-    if (el) el.textContent = "$" + Number(lineTotal).toFixed(2);
+    if (el) el.textContent = "৳" + Number(lineTotal).toFixed(2);
   }
 
   function postUpdate(productId, size, quantity, row) {
