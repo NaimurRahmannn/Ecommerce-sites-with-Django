@@ -21,12 +21,12 @@ TEMPLATES_DIR=os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dubg2je02_ql0b4bq8u89i*f#jq=v96fvon%r9*in=_^6wf@3&'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dubg2je02_ql0b4bq8u89i*f#jq=v96fvon%r9*in=_^6wf@3&')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -131,6 +132,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR , "public/static")
 ]
 
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'public/static') 
 MEDIA_URL = '/media/'
 
@@ -141,3 +148,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+SITE_URL = 'https://Haatify.onrender.com'
