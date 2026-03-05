@@ -684,7 +684,347 @@
       </div>
     </div>
 
+    </div>
+
     {% block start %} {% endblock %}
+
+    <!-- ===== FOOTER ===== -->
+    <style>
+      .hf-footer {
+        background: #1a1714;
+        color: rgba(255,255,255,0.6);
+        font-size: 13.5px;
+        line-height: 1.7;
+      }
+
+      /* Main footer */
+      .hf-footer-main {
+        padding: 52px 0 40px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+      }
+
+      /* Brand column */
+      .hf-footer-brand .footer-logo {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 14px;
+      }
+      .hf-footer-brand .footer-logo span {
+        color: #B88646;
+      }
+      .hf-footer-brand p {
+        max-width: 280px;
+        margin-bottom: 18px;
+        color: rgba(255,255,255,0.45);
+        font-size: 13px;
+      }
+
+      /* Social icons */
+      .hf-footer-social {
+        display: flex;
+        gap: 10px;
+      }
+      .hf-footer-social a {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.12);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.5);
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.25s;
+      }
+      .hf-footer-social a:hover {
+        background: #B88646;
+        border-color: #B88646;
+        color: #fff;
+        transform: translateY(-2px);
+      }
+
+      /* Footer columns */
+      .hf-footer-heading {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 15px;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 18px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+      .hf-footer-heading::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 28px;
+        height: 2px;
+        background: #B88646;
+        border-radius: 1px;
+      }
+      .hf-footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .hf-footer-links li {
+        margin-bottom: 9px;
+      }
+      .hf-footer-links a {
+        color: rgba(255,255,255,0.5);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s, padding-left 0.2s;
+        display: inline-block;
+      }
+      .hf-footer-links a:hover {
+        color: #B88646;
+        padding-left: 4px;
+      }
+
+      /* Contact info in footer */
+      .hf-footer-contact li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .hf-footer-contact li i {
+        color: #B88646;
+        font-size: 13px;
+        margin-top: 3px;
+        flex-shrink: 0;
+      }
+      .hf-footer-contact li span {
+        color: rgba(255,255,255,0.5);
+        font-size: 13px;
+      }
+      .hf-footer-contact li a {
+        color: rgba(255,255,255,0.5);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s;
+      }
+      .hf-footer-contact li a:hover {
+        color: #B88646;
+      }
+
+      /* Newsletter */
+      .hf-footer-newsletter p {
+        color: rgba(255,255,255,0.45);
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+      .hf-newsletter-form {
+        display: flex;
+        gap: 0;
+        max-width: 300px;
+      }
+      .hf-newsletter-form input {
+        flex: 1;
+        padding: 9px 14px;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-right: none;
+        border-radius: 3px 0 0 3px;
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .hf-newsletter-form input::placeholder {
+        color: rgba(255,255,255,0.3);
+      }
+      .hf-newsletter-form input:focus {
+        border-color: #B88646;
+      }
+      .hf-newsletter-form button {
+        padding: 9px 16px;
+        background: #B88646;
+        border: 1px solid #B88646;
+        border-radius: 0 3px 3px 0;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+      .hf-newsletter-form button:hover {
+        background: #a07638;
+      }
+
+      /* Payment icons row */
+      .hf-footer-payments {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .hf-footer-payments .pay-icon {
+        width: 42px;
+        height: 26px;
+        border-radius: 3px;
+        background: rgba(255,255,255,0.08);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+        color: rgba(255,255,255,0.4);
+        letter-spacing: 0.3px;
+      }
+
+      /* Bottom bar */
+      .hf-footer-bottom {
+        padding: 18px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .hf-footer-bottom .copyright {
+        font-size: 12.5px;
+        color: rgba(255,255,255,0.35);
+        margin: 0;
+      }
+      .hf-footer-bottom .copyright a {
+        color: #B88646;
+        text-decoration: none;
+      }
+      .hf-footer-bottom .copyright a:hover {
+        text-decoration: underline;
+      }
+      .hf-footer-bottom-links {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .hf-footer-bottom-links a {
+        font-size: 12px;
+        color: rgba(255,255,255,0.35);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .hf-footer-bottom-links a:hover {
+        color: #B88646;
+      }
+
+      /* Responsive footer */
+      @media (max-width: 767px) {
+        .hf-footer-main { padding: 36px 0 28px; }
+        .hf-footer-bottom { justify-content: center; text-align: center; }
+        .hf-footer-bottom-links { justify-content: center; }
+        .hf-newsletter-form { max-width: 100%; }
+      }
+    </style>
+
+    <footer class="hf-footer">
+      <div class="hf-footer-main">
+        <div class="container">
+          <div class="row">
+
+            <!-- Brand Column -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+              <div class="hf-footer-brand">
+                <a href="/" class="footer-logo">Haat<span>ify</span></a>
+                <p>Your trusted online destination for premium products. Quality, elegance, and convenience — all in one place.</p>
+                <div class="hf-footer-social">
+                  <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                  <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                  <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 col-6 mb-4 mb-lg-0">
+              <h6 class="hf-footer-heading">Quick Links</h6>
+              <ul class="hf-footer-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="{% url 'cart' %}">My Cart</a></li>
+                <li><a href="{% url 'checkout' %}">Checkout</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+              </ul>
+            </div>
+
+            <!-- Customer Care -->
+            <div class="col-lg-2 col-md-6 col-6 mb-4 mb-lg-0">
+              <h6 class="hf-footer-heading">Customer Care</h6>
+              <ul class="hf-footer-links">
+                <li><a href="#">Track Order</a></li>
+                <li><a href="#">Shipping Info</a></li>
+                <li><a href="#">Returns &amp; Exchanges</a></li>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Size Guide</a></li>
+              </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+              <h6 class="hf-footer-heading">Contact</h6>
+              <ul class="hf-footer-contact" style="list-style:none; padding:0; margin:0;">
+                <li>
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span>MBSTU, Santosh,<br>Tangail, Bangladesh</span>
+                </li>
+                <li>
+                  <i class="fas fa-phone-alt"></i>
+                  <a href="tel:+8801712345678">+880 1712-345678</a>
+                </li>
+                <li>
+                  <i class="fas fa-envelope"></i>
+                  <a href="mailto:hatify.bd@onlineretailer.com">hatify.bd@onlineretailer.com</a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="col-lg-3 col-md-6">
+              <h6 class="hf-footer-heading">Newsletter</h6>
+              <div class="hf-footer-newsletter">
+                <p>Subscribe to get updates on new arrivals, offers &amp; more.</p>
+                <form class="hf-newsletter-form" onsubmit="return false;">
+                  <input type="email" placeholder="Your email address" />
+                  <button type="submit">Subscribe</button>
+                </form>
+                <div class="hf-footer-payments">
+                  <span class="pay-icon">VISA</span>
+                  <span class="pay-icon">MC</span>
+                  <span class="pay-icon">bKash</span>
+                  <span class="pay-icon">Nagad</span>
+                  <span class="pay-icon">COD</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div class="container">
+        <div class="hf-footer-bottom">
+          <p class="copyright">&copy; 2026 <a href="/">Haatify</a>. All rights reserved.</p>
+          <ul class="hf-footer-bottom-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
 
     <script>
     (function(){

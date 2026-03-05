@@ -57,5 +57,10 @@ class Product(Basemodel):
 class ProductImage(Basemodel):
     product=models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_images")
     product_image=models.ImageField(upload_to="product")
-    
-    
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Image for {self.product.product_name}"
+
