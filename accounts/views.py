@@ -19,10 +19,6 @@ def login_page(request):
             return HttpResponseRedirect(request.path_info)
 
 
-        if not user_obj[0].profile.is_email_verified:
-            messages.warning(request, 'Your account is not verified.')
-            return HttpResponseRedirect(request.path_info)
-
         user_obj = authenticate(username = email , password= password)
         if user_obj:
             login(request , user_obj)
@@ -60,6 +56,10 @@ def register_page(request):
         return HttpResponseRedirect(request.path_info)
 
     return render(request,'accounts/register.html')
+def logout_page(request):
+    logout(request)
+    return redirect('/')
+
 def activate_email(request , email_token):
     try:
         user = Profile.objects.get(email_token= email_token)

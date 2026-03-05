@@ -1,0 +1,105 @@
+{% extends "base/base.html" %}
+
+{% block start %}
+
+<style>
+  .search-section { padding: 40px 0; min-height: 60vh; }
+  .search-heading { font-size: 22px; font-weight: 700; color: #2b2218; margin-bottom: 6px; }
+  .search-meta { font-size: 14px; color: #888; margin-bottom: 28px; }
+  .search-meta strong { color: #2b2218; }
+
+  .search-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s;
+  }
+  .search-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.07); }
+  .search-card .card-img-top-wrap {
+    position: relative;
+    overflow: hidden;
+    background: #f8f6f3;
+  }
+  .search-card .card-img-top-wrap img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s;
+  }
+  .search-card:hover .card-img-top-wrap img { transform: scale(1.04); }
+  .search-card .quick-view-overlay {
+    position: absolute; inset: 0;
+    background: rgba(43,34,24,0.45);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .search-card:hover .quick-view-overlay { opacity: 1; }
+  .search-card .quick-view-overlay a {
+    background: #fff; color: #2b2218;
+    padding: 8px 18px; border-radius: 4px;
+    font-size: 13px; font-weight: 600;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .search-card .quick-view-overlay a:hover { background: #f5f0e8; }
+  .search-card .card-info { padding: 14px 16px; }
+  .search-card .product-category { font-size: 11px; color: #b0a08a; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .search-card .product-name { display: block; font-size: 14px; font-weight: 600; color: #2b2218; text-decoration: none; margin-bottom: 6px; }
+  .search-card .product-name:hover { color: #B88646; }
+  .search-card .product-price { font-size: 15px; font-weight: 700; color: #2b2218; }
+
+  .search-empty { text-align: center; padding: 60px 20px; }
+  .search-empty i { font-size: 48px; color: #ddd; margin-bottom: 16px; }
+  .search-empty h5 { font-size: 18px; color: #555; margin-bottom: 6px; }
+  .search-empty p { font-size: 14px; color: #999; }
+</style>
+
+<section class="search-section">
+  <div class="container">
+
+    {% if query %}
+      <h3 class="search-heading">Search results for "{{ query }}"</h3>
+      <p class="search-meta"><strong>{{ products|length }}</strong> product{{ products|length|pluralize }} found</p>
+    {% else %}
+      <h3 class="search-heading">Search Products</h3>
+      <p class="search-meta">Enter a keyword in the search bar above.</p>
+    {% endif %}
+
+    <div class="row">
+      {% for product in products %}
+      <div class="col-lg-3 col-md-4 col-6">
+        <div class="search-card">
+          <div class="card-img-top-wrap">
+            <img src="/media/{{ product.product_images.first.product_image }}" alt="{{ product.product_name }}" />
+            <div class="quick-view-overlay">
+              <a href="{% url 'get_product' product.slug %}">
+                <i class="fas fa-eye" style="margin-right:4px;"></i> View Details
+              </a>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="product-category">{{ product.category.categroy_name }}</div>
+            <a href="{% url 'get_product' product.slug %}" class="product-name">{{ product.product_name }}</a>
+            <div class="product-price">৳{{ product.price|floatformat:2 }}</div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      {% if query %}
+      <div class="col-12">
+        <div class="search-empty">
+          <i class="fas fa-search"></i>
+          <h5>No products found</h5>
+          <p>Try a different keyword or browse our categories.</p>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

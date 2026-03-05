@@ -621,7 +621,7 @@
             </a>
 
             <!-- Search Bar -->
-            <form action="#" class="hf-search" method="GET">
+            <form action="{% url 'search' %}" class="hf-search" method="GET">
               <input type="text" class="hf-search-input" placeholder="Search for products, brands and more..." name="q" />
               <button type="submit" class="hf-search-btn">
                 <i class="fas fa-search"></i>
@@ -646,6 +646,17 @@
               <span class="hf-action-divider d-none d-lg-block"></span>
 
               <!-- Account -->
+              {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="hf-action-item">
+                <span class="hf-action-icon hf-user-icon">
+                  <i class="fas fa-user"></i>
+                </span>
+                <span class="hf-action-label d-none d-lg-block">
+                  <span class="label-top">{{ user.first_name|default:user.username }}</span>
+                  <span class="label-bottom">Logout</span>
+                </span>
+              </a>
+              {% else %}
               <a href="{% url 'login' %}" class="hf-action-item">
                 <span class="hf-action-icon hf-user-icon">
                   <i class="fas fa-user"></i>
@@ -655,6 +666,7 @@
                   <span class="label-bottom">Sign in / Register</span>
                 </span>
               </a>
+              {% endif %}
 
             </div>
 
@@ -679,8 +691,12 @@
         <!-- Sidebar content will be cloned here via JS -->
       </div>
       <div class="hf-msb-footer">
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        {% else %}
         <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Sign In</a>
         <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Create Account</a>
+        {% endif %}
       </div>
     </div>
 

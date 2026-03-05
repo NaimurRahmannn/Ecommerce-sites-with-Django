@@ -304,7 +304,7 @@
           <div class="hero-subtitle">Haatify Collection</div>
           <h2 class="hero-title">Discover Timeless Elegance</h2>
           <p class="hero-text">Explore our curated selection of premium products crafted for those who appreciate quality and refined taste.</p>
-          <a href="#products-grid" class="hero-btn">Shop Now</a>
+          <a href="{% url 'index' %}" class="hero-btn">Shop Now</a>
         </div>
         {% endif %}
 
@@ -315,7 +315,7 @@
         <!-- Products grid header -->
         <div class="products-grid-header" id="products-grid">
           <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
-            <h5 style="margin:0;">{% if current_category %}{{ current_category.categroy_name }}{% else %}All Products{% endif %}</h5>
+            <h5 style="margin:0;">{% if current_category %}{{ current_category.categroy_name }}{% elif current_gender == 'MEN' %}Men{% elif current_gender == 'WOMEN' %}Women{% else %}All Products{% endif %}</h5>
             <span class="product-count">{{ products|length }} product{{ products|length|pluralize }}</span>
           </div>
           <div class="sort-by-wrap">

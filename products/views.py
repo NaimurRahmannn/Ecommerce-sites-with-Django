@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib import messages
+from django.db.models import Q
 from products.models import Product, Category, Order, OrderItem
 
 
@@ -18,6 +19,18 @@ def _save_cart(request, cart):
             continue
     request.session["cart_count"] = total
     request.session.modified = True
+
+
+def search(request):
+    query = request.GET.get('q', '').strip()
+    products = []
+    if query:
+        products = Product.objects.filter(
+            Q(product_name__icontains=query)
+            | Q(category__categroy_name__icontains=query)
+            | Q(product_description__icontains=query)
+        ).distinct()
+    return render(request, 'product/search.html', {'products': products, 'query': query})
 
 
 def get_product(request, slug):
@@ -256,6 +269,24 @@ def category_products(request, slug):
     context = {
         "products": products,
         "current_category": category,
+        "current_sort": sort,
+    }
+    return render(request, "home/index.html", context)
+
+
+def gender_products(request, gender):
+    gender_upper = gender.upper()
+    if gender_upper not in ('MEN', 'WOMEN'):
+        return redirect('index')
+    sort = request.GET.get('sort', 'default')
+    products = Product.objects.filter(category__category_type=gender_upper)
+    if sort == 'price_low':
+        products = products.order_by('price')
+    elif sort == 'price_high':
+        products = products.order_by('-price')
+    context = {
+        "products": products,
+        "current_gender": gender_upper,
         "current_sort": sort,
     }
     return render(request, "home/index.html", context)

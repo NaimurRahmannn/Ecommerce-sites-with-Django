@@ -10,9 +10,13 @@ from products.views import (
     category_products,
     place_order,
     invoice,
+    search,
+    gender_products,
 )
 
 urlpatterns = [
+    path('search/', search, name="search"),
+    path('gender/<str:gender>/', gender_products, name="gender_products"),
     path('cart/', cart, name="cart"),
     path('cart/update/', update_cart, name="update_cart"),
     path('checkout/', checkout, name="checkout"),
