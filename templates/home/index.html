@@ -334,7 +334,7 @@
           <div class="col-lg-4 col-md-6 col-6">
             <div class="classic-product-card">
               <div class="card-img-top-wrap">
-                <img src="/media/{{product.product_images.first.product_image}}" alt="{{product.product_name}}" />
+                <img src="{{ product.product_images.first.product_image.url }}" alt="{{product.product_name}}" />
                 <div class="quick-view-overlay">
                   <a href="{% url 'get_product' product.slug %}">
                     <i class="fas fa-eye" style="margin-right:4px;"></i> View Details

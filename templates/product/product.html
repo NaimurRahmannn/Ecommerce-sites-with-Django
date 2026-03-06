@@ -369,7 +369,7 @@
                 <div class="main-img-frame">
                   <img
                     id="main-product-image"
-                    src="/media/{{product.product_images.first.product_image}}"
+                    src="{{ product.product_images.first.product_image.url }}"
                     alt="{{product.product_name}}"
                   />
                 </div>
@@ -379,9 +379,9 @@
                   <a
                     href="#"
                     class="thumb-item {% if forloop.first %}active{% endif %}"
-                    data-image="/media/{{image.product_image}}"
+                    data-image="{{ image.product_image.url }}"
                   >
-                    <img src="/media/{{image.product_image}}" alt="thumb {{ forloop.counter }}" />
+                    <img src="{{ image.product_image.url }}" alt="thumb {{ forloop.counter }}" />
                   </a>
                   {% endfor %}
                 </div>
