@@ -179,6 +179,9 @@
     box-shadow: 0 0 0 3px rgba(184, 134, 70, 0.10);
     background: #fff;
   }
+  .auth-input-group .auth-input-wrap {
+    position: relative;
+  }
   .auth-input-group .input-icon {
     position: absolute;
     bottom: 12px;
@@ -358,8 +361,10 @@
 
         <div class="auth-input-group">
           <label for="reg-password">Password</label>
-          <i class="fas fa-lock input-icon"></i>
-          <input id="reg-password" name="password" class="auth-input" placeholder="Create a strong password" type="password" required />
+          <div class="auth-input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input id="reg-password" name="password" class="auth-input" placeholder="Create a strong password" type="password" required />
+          </div>
           <div class="password-hint">Use at least 8 characters with letters and numbers</div>
         </div>
 
