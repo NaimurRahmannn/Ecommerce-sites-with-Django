@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate , login , logout
 from django.http import HttpResponseRedirect,HttpResponse
 from .models import Profile
 from base.emails import send_account_activation_email
-import smtplib
+import logging
+
+
+logger = logging.getLogger(__name__)
 # Create your views here.
 def login_page(request):
      if request.method == 'POST':
@@ -45,14 +49,16 @@ def register_page(request):
         user_obj.save()
 
         email_token = str(user_obj.profile.email_token)
-        try:
-            send_account_activation_email(email, email_token)
-            messages.success(request, 'An email has been sent on your mail.')
-        except smtplib.SMTPException:
-            messages.warning(
-                request,
-                'Account created, but activation email could not be sent. Check email settings.'
-            )
+        email_user = (settings.EMAIL_HOST_USER or '').strip()
+        email_password = (settings.EMAIL_HOST_PASSWORD or '').strip()
+
+        if email_user and email_password:
+            try:
+                send_account_activation_email(email, email_token)
+            except Exception as e:
+                logger.exception('Activation email failed for user %s: %s', email, e)
+
+        messages.success(request, 'Account created successfully. Please login.')
         return HttpResponseRedirect(request.path_info)
 
     return render(request,'accounts/register.html')
