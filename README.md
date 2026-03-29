@@ -24,6 +24,12 @@
 
 <br/>
 
+## 🎬 Project Video
+
+- YouTube Demo: https://youtu.be/06E7dtBlxFk?si=zh1EPSy-Z79_eTTK
+
+<br/>
+
 ## ⚡ Features
 
 | Feature | Description |
