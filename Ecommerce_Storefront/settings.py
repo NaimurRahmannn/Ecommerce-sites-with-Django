@@ -13,8 +13,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 TEMPLATES_DIR=os.path.join(BASE_DIR, 'templates')
 
 
@@ -22,7 +24,7 @@ TEMPLATES_DIR=os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dubg2je02_ql0b4bq8u89i*f#jq=v96fvon%r9*in=_^6wf@3&')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -87,7 +89,7 @@ WSGI_APPLICATION = 'Ecommerce_Storefront.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres:jani%20na@localhost/storefront_db'
+        default=os.environ.get('DATABASE_URL')
     )
 }
 
