@@ -99,10 +99,12 @@ def cart(request):
             }
         )
 
+    shipping = 100 if cart_items else 0
     context = {
         "cart_items": cart_items,
         "subtotal": subtotal,
-        "total": subtotal,
+        "shipping": shipping,
+        "total": subtotal + shipping,
     }
     return render(request, "product/cart.html", context)
 
@@ -166,13 +168,16 @@ def update_cart(request):
         if item.get("product_id") == product_id and item.get("size", "") == size:
             line_total = product.price * item_qty
 
+    shipping = 100 if subtotal > 0 else 0
+
     return JsonResponse(
         {
             "success": True,
             "removed": quantity <= 0,
             "line_total": line_total,
             "subtotal": subtotal,
-            "total": subtotal,
+            "shipping": shipping,
+            "total": subtotal + shipping,
             "cart_count": cart_count,
         }
     )

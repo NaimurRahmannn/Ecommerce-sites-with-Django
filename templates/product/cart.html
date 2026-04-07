@@ -414,7 +414,7 @@
           </div>
           <div class="summary-row">
             <span class="summary-label">Shipping</span>
-            <span class="summary-value" style="color:#00b517;">Free</span>
+            <span class="summary-value" style="color:#00b517;">৳<span id="cart-shipping">{{ shipping|floatformat:2 }}</span></span>
           </div>
           <div class="summary-row border-top-gold">
             <span class="summary-total-label">Total</span>
@@ -475,10 +475,12 @@
     if (badge) badge.textContent = count;
   }
 
-  function updateTotals(subtotal, total) {
+  function updateTotals(subtotal, shipping, total) {
     var subtotalEl = document.getElementById("cart-subtotal");
+    var shippingEl = document.getElementById("cart-shipping");
     var totalEl = document.getElementById("cart-total");
     if (subtotalEl) subtotalEl.textContent = Number(subtotal).toFixed(2);
+    if (shippingEl) shippingEl.textContent = Number(shipping).toFixed(2);
     if (totalEl) totalEl.textContent = Number(total).toFixed(2);
   }
 
@@ -514,7 +516,7 @@
       .then(function (data) {
         if (!data.success) return;
         updateBadge(data.cart_count);
-        updateTotals(data.subtotal, data.total);
+        updateTotals(data.subtotal, data.shipping, data.total);
         if (data.removed && row) {
           row.remove();
         } else {
