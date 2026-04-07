@@ -861,25 +861,15 @@ document.getElementById('checkoutForm').addEventListener('submit', function(e) {
     });
   } else if (method === 'bkash') {
     var trx = document.querySelector('[name="bkash_trx_id"]');
-    var ref = document.querySelector('[name="bkash_reference"]');
     if (!trx || !trx.value.trim()) {
       errors.push('bKash Transaction ID is required');
       if (trx) trx.classList.add('is-invalid');
     }
-    if (!ref || !ref.value.trim()) {
-      errors.push('bKash Reference is required');
-      if (ref) ref.classList.add('is-invalid');
-    }
   } else if (method === 'nagad') {
     var trx = document.querySelector('[name="nagad_trx_id"]');
-    var ref = document.querySelector('[name="nagad_reference"]');
     if (!trx || !trx.value.trim()) {
       errors.push('Nagad Transaction ID is required');
       if (trx) trx.classList.add('is-invalid');
-    }
-    if (!ref || !ref.value.trim()) {
-      errors.push('Nagad Reference is required');
-      if (ref) ref.classList.add('is-invalid');
     }
   }
 

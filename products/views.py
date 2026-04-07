@@ -329,17 +329,11 @@ def place_order(request):
         if not transaction_id:
             messages.error(request, "bKash Transaction ID is required.")
             return redirect(request.META.get("HTTP_REFERER", "cart"))
-        if not reference:
-            messages.error(request, "bKash Reference is required.")
-            return redirect(request.META.get("HTTP_REFERER", "cart"))
     elif payment_method == "nagad":
         transaction_id = request.POST.get("nagad_trx_id", "").strip()
         reference = request.POST.get("nagad_reference", "").strip()
         if not transaction_id:
             messages.error(request, "Nagad Transaction ID is required.")
-            return redirect(request.META.get("HTTP_REFERER", "cart"))
-        if not reference:
-            messages.error(request, "Nagad Reference is required.")
             return redirect(request.META.get("HTTP_REFERER", "cart"))
 
     # Build order items from hidden fields
