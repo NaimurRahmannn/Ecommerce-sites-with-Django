@@ -188,6 +188,8 @@ def buy_now(request, slug):
         qty_raw = request.GET.get("quantity", "1")
         size = request.GET.get("size", "")
 
+    size = size.strip()
+
     try:
         quantity = int(qty_raw)
     except ValueError:
@@ -197,8 +199,11 @@ def buy_now(request, slug):
         quantity = 1
 
     if product.size_variant.exists() and not size:
-        messages.error(request, "Please select a size before Buy now.")
-        return redirect("get_product", slug=product.slug)
+        # If size is missing from the request, default to the first configured size.
+        size = product.size_variant.values_list("size_name", flat=True).first() or ""
+        if not size:
+            messages.error(request, "Please select a size before Buy now.")
+            return redirect("get_product", slug=product.slug)
 
     line_total = product.price * quantity
     subtotal = line_total
@@ -309,8 +314,8 @@ def place_order(request):
     if payment_method not in valid_methods:
         payment_method = 'cod'
 
-    # Validate required fields
-    required = [email, phone, first_name, last_name, street_address, city, state, zip_code]
+    # Keep required fields in sync with checkout.html.
+    required = [email, phone, first_name, last_name, city]
     if not all(required):
         messages.error(request, "Please fill in all required fields.")
         return redirect(request.META.get("HTTP_REFERER", "cart"))
