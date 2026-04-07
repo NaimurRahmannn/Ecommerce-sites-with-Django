@@ -22,7 +22,6 @@ def login_page(request):
             messages.warning(request, 'Account not found.')
             return HttpResponseRedirect(request.path_info)
 
-
         user_obj = authenticate(username = email , password= password)
         if user_obj:
             login(request , user_obj)
@@ -41,7 +40,7 @@ def register_page(request):
         if user_obj.exists():
             messages.warning(request, 'Email is already taken.')
             return HttpResponseRedirect(request.path_info)
-
+        
         print(email)
 
         user_obj = User.objects.create(first_name = first_name , last_name= last_name , email = email , username = email)
